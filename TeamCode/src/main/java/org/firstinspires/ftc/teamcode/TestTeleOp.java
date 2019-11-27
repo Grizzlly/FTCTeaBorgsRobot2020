@@ -75,8 +75,8 @@ public class TestTeleOp extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         frontLeft  = hardwareMap.get(DcMotor.class, "fl_motor");
         frontRight = hardwareMap.get(DcMotor.class, "fr_motor");
-        backLeft  = hardwareMap.get(DcMotor.class, "fl_motor");
-        backRight = hardwareMap.get(DcMotor.class, "fr_motor");
+        backLeft  = hardwareMap.get(DcMotor.class, "bl_motor");
+        backRight = hardwareMap.get(DcMotor.class, "br_motor");
         motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
         clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
         clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
@@ -102,13 +102,14 @@ public class TestTeleOp extends LinearOpMode {
 
             //omni
             double gamepadLeftY = -gamepad2.right_stick_y;
-            double gamepadLeftX = -gamepad2.right_stick_x;
-            double gamepadRightX = gamepad2.left_stick_x;
+            double gamepadLeftX = -gamepad2.left_stick_x;
+            double gamepadLeftBumper = gamepad2.left_trigger;
+            double gamepadRightBumper = -gamepad2.right_trigger;
 
-            double powerFrontLeft = -gamepadLeftY - gamepadLeftX - gamepadRightX;
-            double powerFrontRight = gamepadLeftY - gamepadLeftX - gamepadRightX;
-            double powerBackLeft = -gamepadLeftY + gamepadLeftX - gamepadRightX;
-            double powerBackRight = gamepadLeftY + gamepadLeftX - gamepadRightX;
+            double powerFrontLeft = -gamepadLeftY - gamepadLeftX - (gamepadLeftBumper + gamepadRightBumper);
+            double powerFrontRight = gamepadLeftY - gamepadLeftX - (gamepadLeftBumper + gamepadRightBumper);
+            double powerBackLeft = -gamepadLeftY + gamepadLeftX - (gamepadLeftBumper + gamepadRightBumper);
+            double powerBackRight = gamepadLeftY + gamepadLeftX - (gamepadLeftBumper + gamepadRightBumper);
 
             double powerLatchingUp = -gamepad1.right_trigger;
             double powerLatchingDown = gamepad1.left_trigger;
