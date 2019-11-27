@@ -61,9 +61,9 @@ public class TestTeleOp extends LinearOpMode {
     private DcMotor frontRight = null;
     private DcMotor backLeft = null;
     private DcMotor backRight = null;
-    private DcMotor motor1 = null;
-    private DcMotor motor2 = null;
-    private DcMotor motor3 = null;
+    private DcMotor motorLift = null;
+    private DcMotor clawMainMotor = null;
+    private DcMotor clawSecMotor = null;
 
     @Override
     public void runOpMode() {
@@ -77,9 +77,9 @@ public class TestTeleOp extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "fr_motor");
         backLeft  = hardwareMap.get(DcMotor.class, "fl_motor");
         backRight = hardwareMap.get(DcMotor.class, "fr_motor");
-        motor1 = hardwareMap.get(DcMotor.class, "motor1");
-        motor2  = hardwareMap.get(DcMotor.class, "motor2");
-        motor3 = hardwareMap.get(DcMotor.class, "motor3");
+        motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
+        clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
+        clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -87,9 +87,9 @@ public class TestTeleOp extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-        motor1.setDirection(DcMotor.Direction.FORWARD);
-        motor2.setDirection(DcMotor.Direction.FORWARD);
-        motor3.setDirection(DcMotor.Direction.FORWARD);
+        motorLift.setDirection(DcMotor.Direction.FORWARD);
+        clawMainMotor.setDirection(DcMotor.Direction.FORWARD);
+        clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -137,37 +137,42 @@ public class TestTeleOp extends LinearOpMode {
             //omni
 
             //lift
-            motor1.setPower(powerLatchingUp);
-            motor1.setPower(powerLatchingDown);
+            motorLift.setPower(powerLatchingUp);
+            motorLift.setPower(powerLatchingDown);
             //lift
 
             //claws
             if(gamepad1.dpad_up==true)
             {
-                motor2.setPower(0.5);
+                clawMainMotor.setPower(0.5);
             }
             else if(gamepad1.dpad_down==true)
             {
-                motor2.setPower(-0.5);
+                clawMainMotor.setPower(-0.5);
             }
             else {
-                motor2.setPower(0.0);
+                clawMainMotor.setPower(0.0);
             }
             if(gamepad1.dpad_left==true)
             {
-                motor3.setPower(0.5);
+                clawSecMotor.setPower(0.5);
             }
             else if(gamepad1.dpad_right==true)
             {
-                motor3.setPower(-0.5);
+                clawSecMotor.setPower(-0.5);
             }
             else {
-                motor3.setPower(0.0);
+                clawSecMotor.setPower(0.0);
             }
             //claws
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Front Left Power", ": " + powerFrontLeft);
+            telemetry.addData("Front Right Power", ": " + powerFrontRight);
+            telemetry.addData("Back Left Power", ": " + powerBackLeft);
+            telemetry.addData("Back Right Power", ": " + powerBackRight);
+
             telemetry.update();
         }
     }
