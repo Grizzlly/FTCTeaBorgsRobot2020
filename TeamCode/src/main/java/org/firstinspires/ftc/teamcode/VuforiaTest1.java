@@ -320,18 +320,16 @@ public class VuforiaTest1 extends LinearOpMode {
 
         targetsSkyStone.activate();
         while (!isStopRequested()) {
-
+            targetsSkyStone.deactivate();
+            targetsSkyStone.activate();
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-                    //telemetry.addData("Visible Target", trackable.getName());
-                    //targetVisible = true;
+                    telemetry.addData("Visible Target", trackable.getName());
+                    targetVisible = true;
 
-                    if(trackable.getName()=="Stone Target")
-                    {
-                        targetVisible = true;
-                    }
+
 
 
 
@@ -355,8 +353,8 @@ public class VuforiaTest1 extends LinearOpMode {
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 // express the rotation of the robot in degrees.
-                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, RADIANS);
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                //telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
                 double verticala = -Math.sin(rotation.thirdAngle);
                 double orizontala = Math.cos(rotation.thirdAngle);
 
