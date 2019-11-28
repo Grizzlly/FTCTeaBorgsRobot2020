@@ -101,15 +101,15 @@ public class TestTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             //omni
-            double gamepadLeftY = -gamepad2.right_stick_y;
+            double gamepadRightY = -gamepad2.right_stick_y;
             double gamepadLeftX = -gamepad2.left_stick_x;
-            double gamepadLeftBumper = gamepad2.left_trigger;
-            double gamepadRightBumper = -gamepad2.right_trigger;
+            double gamepadLeftTrigger = -gamepad2.left_trigger;
+            double gamepadRightTrigger = gamepad2.right_trigger;
 
-            double powerFrontLeft = -gamepadLeftY - gamepadLeftX - (gamepadLeftBumper + gamepadRightBumper);
-            double powerFrontRight = gamepadLeftY - gamepadLeftX - (gamepadLeftBumper + gamepadRightBumper);
-            double powerBackLeft = -gamepadLeftY + gamepadLeftX - (gamepadLeftBumper + gamepadRightBumper);
-            double powerBackRight = gamepadLeftY + gamepadLeftX - (gamepadLeftBumper + gamepadRightBumper);
+            double powerFrontLeft = -gamepadRightY - gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
+            double powerFrontRight = gamepadRightY - gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
+            double powerBackLeft = -gamepadRightY + gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
+            double powerBackRight = gamepadRightY + gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
 
             double powerLatchingUp = -gamepad1.right_trigger;
             double powerLatchingDown = gamepad1.left_trigger;
@@ -123,13 +123,13 @@ public class TestTeleOp extends LinearOpMode {
 
 
 
-           /* if (gamepad2.right_bumper == true) {
+           if (gamepad2.right_bumper == true) {
                 powerFrontLeft = powerFrontLeft *   omniSurpress;
                 powerBackLeft = powerBackLeft *     omniSurpress;
                 powerFrontRight = powerFrontRight * omniSurpress;
                 powerBackRight = powerBackRight *   omniSurpress;
 
-            }*/
+            }
 
             frontLeft.setPower(powerFrontLeft);
             frontRight.setPower(powerFrontRight);
@@ -143,11 +143,11 @@ public class TestTeleOp extends LinearOpMode {
             //lift
 
             //claws
-            if(gamepad1.dpad_up==true)
+            if(gamepad1.y==true)
             {
                 clawMainMotor.setPower(0.5);
             }
-            else if(gamepad1.dpad_down==true)
+            else if(gamepad1.a==true)
             {
                 clawMainMotor.setPower(-0.5);
             }
