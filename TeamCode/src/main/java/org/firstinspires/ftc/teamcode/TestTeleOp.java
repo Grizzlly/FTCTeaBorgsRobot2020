@@ -102,7 +102,7 @@ public class TestTeleOp extends LinearOpMode {
 
             //omni
             double gamepadLeftY = -gamepad2.right_stick_y;
-            double gamepadLeftX = gamepad2.left_stick_x;
+            double gamepadLeftX = -gamepad2.left_stick_x;
             double gamepadLeftBumper = gamepad2.left_trigger;
             double gamepadRightBumper = -gamepad2.right_trigger;
 
