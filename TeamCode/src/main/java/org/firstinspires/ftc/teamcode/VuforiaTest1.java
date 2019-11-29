@@ -319,34 +319,35 @@ public class VuforiaTest1 extends LinearOpMode {
         // Tap the preview window to receive a fresh image.
 
         targetsSkyStone.activate();
-        while (!isStopRequested()) {
-            targetsSkyStone.deactivate();
-            targetsSkyStone.activate();
+        while (!isStopRequested())
+        {
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible())
+                {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
 
-
-
-
-
                     // getUpdatedRobotLocation() will return null if no new information is available since
                     // the last time that call was made, or if the trackable is not currently visible.
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
-                    if (robotLocationTransform != null) {
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getRobotLocation();
+                    if (robotLocationTransform != null)
+                    {
                         lastLocation = robotLocationTransform;
                     }
                     break;
                 }
+                else
+                {
+                    targetVisible = false;
+                    telemetry.addData("Visible Target", "none");
+                }
             }
 
             // Provide feedback as to where the robot is located (if we know).
-
-
-            if (targetVisible) {
+            if (targetVisible)
+            {
                 // express position (translation) of robot in inches.
                 VectorF translation = lastLocation.getTranslation();
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
@@ -361,7 +362,8 @@ public class VuforiaTest1 extends LinearOpMode {
                 telemetry.addData("putere verticala", ": " + verticala);
                 telemetry.addData("putere orizontala", ": " + orizontala);
             }
-            else {
+            else
+            {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();

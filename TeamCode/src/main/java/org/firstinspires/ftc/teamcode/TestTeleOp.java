@@ -57,11 +57,14 @@ public class TestTeleOp extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+
     private DcMotor frontLeft = null;
     private DcMotor frontRight = null;
     private DcMotor backLeft = null;
     private DcMotor backRight = null;
+
     private DcMotor motorLift = null;
+
     private DcMotor clawMainMotor = null;
     private DcMotor clawSecMotor = null;
 
@@ -77,9 +80,9 @@ public class TestTeleOp extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "fr_motor");
         backLeft  = hardwareMap.get(DcMotor.class, "bl_motor");
         backRight = hardwareMap.get(DcMotor.class, "br_motor");
-        motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
-        clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
-        clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
+        //motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
+        //clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
+        //clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -95,14 +98,14 @@ public class TestTeleOp extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double  omniSurpress = 0.3;
+        double  omniSurpress = 0.4;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
             //omni
             double gamepadRightY = -gamepad2.right_stick_y;
-            double gamepadLeftX = -gamepad2.left_stick_x;
+            double gamepadLeftX = gamepad2.right_stick_x;
             double gamepadLeftTrigger = -gamepad2.left_trigger;
             double gamepadRightTrigger = gamepad2.right_trigger;
 
@@ -154,11 +157,12 @@ public class TestTeleOp extends LinearOpMode {
             else {
                 clawMainMotor.setPower(0.0);
             }
-            if(gamepad1.dpad_left==true)
+
+            if(gamepad1.dpad_down==true)
             {
                 clawSecMotor.setPower(0.5);
             }
-            else if(gamepad1.dpad_right==true)
+            else if(gamepad1.dpad_up==true)
             {
                 clawSecMotor.setPower(-0.5);
             }
