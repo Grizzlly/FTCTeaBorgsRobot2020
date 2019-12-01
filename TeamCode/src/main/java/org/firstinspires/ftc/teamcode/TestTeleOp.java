@@ -80,9 +80,9 @@ public class TestTeleOp extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "fr_motor");
         backLeft  = hardwareMap.get(DcMotor.class, "bl_motor");
         backRight = hardwareMap.get(DcMotor.class, "br_motor");
-        //motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
-        //clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
-        //clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
+        motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
+        clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
+        clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
