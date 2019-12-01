@@ -98,7 +98,7 @@ public class TestTeleOp extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double  omniSurpress = 0.4;
+        double omniSurpress = 0.4;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.HINT;
 import com.vuforia.Vuforia;
 
@@ -14,12 +13,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-import java.util.Vector;
-@Autonomous(name="VuforiaTest2", group ="Concept")
+@Autonomous(name="VuforiaTest", group ="Concept")
 
-public class VuforiaTest2 extends LinearOpMode
+public class VuforiaTest extends LinearOpMode
 {
-    private AutonomousFunctions func = new AutonomousFunctions();
+    private HardwareRobot func = null;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -46,8 +44,8 @@ public class VuforiaTest2 extends LinearOpMode
 
         allTargets.activate();
 
-        func = new AutonomousFunctions();
-        func.init(hardwareMap);
+        func = new HardwareRobot();
+        func.initFromMap(hardwareMap);
 
         while(opModeIsActive())
         {
@@ -61,16 +59,16 @@ public class VuforiaTest2 extends LinearOpMode
 
                     if(translation.get(2) > 200)
                     {
-                        func.Move_Forward(0.8);
+                        func.moveForward(0.8);
                     }
-                    else func.Stop_Robot();
+                    else func.stopRobot();
 
 
                     telemetry.addData(target.getName() + "-Translation(X, Y, Z)", translation);
 
                     double degreesToTurn = Math.toDegrees(Math.atan2(translation.get(0), translation.get(2)));
                     telemetry.addData("Degrees To Turn: ", degreesToTurn);
-                }else func.Stop_Robot();
+                }else func.stopRobot();
             }
             telemetry.update();
         }

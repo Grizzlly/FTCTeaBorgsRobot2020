@@ -30,13 +30,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -55,10 +51,7 @@ import com.qualcomm.robotcore.util.Range;
 @Autonomous(name="Basic: Linear OpMode", group="Linear Opmode")
 //@Disabled
 public class TestAutonom extends LinearOpMode {
-    AutonomousFunctions func=new AutonomousFunctions();
-
-
-
+    HardwareRobot func=new HardwareRobot();
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -86,7 +79,7 @@ public class TestAutonom extends LinearOpMode {
 
        //merge in fata 3 sec
 
-        func.Move_Forward(0.5);
+        func.moveForward(0.5);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 3.0))
         {
@@ -96,7 +89,7 @@ public class TestAutonom extends LinearOpMode {
 
        //rotire dreapta 1 sec
 
-        func.Rotate_Right(0.5);
+        func.rotateRight(0.5);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 1.0))
         {
@@ -106,7 +99,7 @@ public class TestAutonom extends LinearOpMode {
 
         //merge in fata 2 sec
 
-        func.Move_Forward(0.5);
+        func.moveForward(0.5);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0))
         {
@@ -114,10 +107,10 @@ public class TestAutonom extends LinearOpMode {
             telemetry.update();
         }
 //apuca tava
-        try{func.ApucaTava();}catch(Exception e){}
+        try{func.apucaTava();}catch(Exception e){}
 
 //merge dreapta 3 sec
-        func.Move_Right(0.5);
+        func.moveRight(0.5);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 3.0))
         {
@@ -125,49 +118,14 @@ public class TestAutonom extends LinearOpMode {
             telemetry.update();
         }
         //lasa tava
-        try{func.LasaTava();}catch(Exception e){}
+        try{func.lasaTava();}catch(Exception e){}
 //merge spate 5 sec si parcheaza
-        func.Move_Backwards(0.5);
+        func.moveBackwards(0.5);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 5.0))
         {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-
-        // run until the end of the match (driver presses STOP)
-        /*while (opModeIsActive()) {
-
-
-
-            func.Move_Forward(0.5);
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
-
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
-
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
-
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
-
-            // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
-        }*/
     }
 }
