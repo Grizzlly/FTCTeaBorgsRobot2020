@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.Vector;
-@Autonomous(name="VuforiaTest2OnBot", group ="Concept")
+@Autonomous(name="VuforiaTest2", group ="Concept")
 
 public class VuforiaTest2 extends LinearOpMode
 {
