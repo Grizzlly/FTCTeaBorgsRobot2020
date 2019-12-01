@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.NoSuchElementException;
-
 public class AutonomousFunctions
 {
     DcMotor frontLeft;
@@ -87,9 +85,14 @@ public class AutonomousFunctions
         backLeft.setPower(0.0);
         backRight.setPower(0.0);
     }
-    public void PicaTava() throws NoSuchMethodException
+
+    public void ApucaTava() throws NoSuchMethodException
     {
         throw new NoSuchMethodException();
-
     }
+    public void LasaTava() throws NoSuchMethodException
+    {
+        throw new NoSuchMethodException();
+    }
+
 }
