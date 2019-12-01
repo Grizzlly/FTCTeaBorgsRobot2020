@@ -54,8 +54,8 @@ import com.qualcomm.robotcore.util.Range;
 
 @Autonomous(name="Basic: Linear OpMode", group="Linear Opmode")
 //@Disabled
-public class testAutonom extends LinearOpMode {
-AutonomousFunctions func=new AutonomousFunctions(hardwareMap);
+public class TestAutonom extends LinearOpMode {
+    AutonomousFunctions func=new AutonomousFunctions();
 
 
 

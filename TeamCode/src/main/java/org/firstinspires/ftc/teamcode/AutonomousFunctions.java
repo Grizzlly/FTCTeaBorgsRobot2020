@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -14,20 +15,18 @@ public class AutonomousFunctions
 
     private ElapsedTime Time = new ElapsedTime();
 
-    private HardwareMap hardwareMap;
 
-    public AutonomousFunctions(HardwareMap hwMap)
+    public void init(HardwareMap hardwareMap)
     {
-        hardwareMap = hwMap;
         frontLeft = hardwareMap.get(DcMotor.class, "fl_motor");
         frontRight = hardwareMap.get(DcMotor.class, "fr_motor");
         backLeft = hardwareMap.get(DcMotor.class, "bl_motor");
         backRight = hardwareMap.get(DcMotor.class, "br_motor");
 
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
     }
 
     public void Move_Forward(double power)
