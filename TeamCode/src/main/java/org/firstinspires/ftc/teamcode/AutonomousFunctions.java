@@ -14,10 +14,11 @@ public class AutonomousFunctions
 
     private ElapsedTime Time = new ElapsedTime();
 
-    public static HardwareMap hardwareMap;
+    private HardwareMap hardwareMap;
 
-    public void init()
+    public AutonomousFunctions(HardwareMap hwMap)
     {
+        hardwareMap = hwMap;
         frontLeft = hardwareMap.get(DcMotor.class, "fl_motor");
         frontRight = hardwareMap.get(DcMotor.class, "fr_motor");
         backLeft = hardwareMap.get(DcMotor.class, "bl_motor");
@@ -29,7 +30,7 @@ public class AutonomousFunctions
         backRight.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    void Move_Forward(double power)
+    public void Move_Forward(double power)
     {
         frontLeft.setPower(power);
         frontRight.setPower(power);
@@ -37,7 +38,7 @@ public class AutonomousFunctions
         backRight.setPower(power);
     }
 
-    void Move_Backwards(double power)
+    public void Move_Backwards(double power)
     {
         frontLeft.setPower(-power);
         frontRight.setPower(-power);
@@ -45,7 +46,7 @@ public class AutonomousFunctions
         backRight.setPower(-power);
     }
 
-    void Move_Left(double power)
+    public void Move_Left(double power)
     {
         frontLeft.setPower(-power);
         frontRight.setPower(power);
@@ -53,7 +54,7 @@ public class AutonomousFunctions
         backRight.setPower(-power);
     }
 
-    void Move_Right(double power)
+    public void Move_Right(double power)
     {
         frontLeft.setPower(power);
         frontRight.setPower(-power);
@@ -61,7 +62,7 @@ public class AutonomousFunctions
         backRight.setPower(power);
     }
 
-    void Rotate_Right(double power)
+    public void Rotate_Right(double power)
     {
         frontLeft.setPower(power);
         frontRight.setPower(-power);
@@ -69,7 +70,7 @@ public class AutonomousFunctions
         backRight.setPower(-power);
     }
 
-    void Rotate_Left(double power)
+    public void Rotate_Left(double power)
     {
         frontLeft.setPower(-power);
         frontRight.setPower(power);
@@ -77,7 +78,7 @@ public class AutonomousFunctions
         backRight.setPower(power);
     }
 
-    void Stop_Robot()
+    public void Stop_Robot()
     {
         frontLeft.setPower(0.0);
         frontRight.setPower(0.0);
