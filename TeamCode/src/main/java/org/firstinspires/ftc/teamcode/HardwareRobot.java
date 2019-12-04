@@ -97,14 +97,27 @@ public class HardwareRobot
         backRight.setPower(0.0);
     }
 
+    public void move(double powerFR, double powerFL, double powerBR, double powerBL)
+    {
+        frontLeft.setPower(powerFL);
+        frontRight.setPower(powerFR);
+        backLeft.setPower(powerBL);
+        backRight.setPower(powerBR);
+    }
+
     public void apucaTava()
     {
-        clawSecMotor.setPower(1);
+        clawSecMotor.setPower(-0.5);
+    }
+
+    public void stopTava()
+    {
+        clawSecMotor.setPower(0);
     }
 
     public void lasaTava()
     {
-        clawSecMotor.setPower(-1);
+        clawSecMotor.setPower(0.5);
     }
 
     public void moveLift(double power)

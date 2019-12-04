@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Basic: Linear OpMode", group="Linear Opmode")
 //@Disabled
 public class TestAutonom extends LinearOpMode {
-    HardwareRobot func=new HardwareRobot();
+    private HardwareRobot func = null;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -66,66 +66,58 @@ public class TestAutonom extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        //leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        //rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        //leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        //rightDrive.setDirection(DcMotor.Direction.REVERSE);
+
+        func = new HardwareRobot();
+        func.initFromMap(hardwareMap);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
        //merge in fata 3 sec
 
-        func.moveForward(0.5);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0))
+        while (opModeIsActive())
         {
+            func.moveForward(0.5);
+            sleep(4000);
+            func.stopRobot();
+
+            func.rotateRight(0.5);
+            sleep(1000);
+            func.stopRobot();
+
+            func.moveForward(0.5);
+            sleep(3000);
+            func.stopRobot();
+
+            func.apucaTava();
+            sleep(500);
+            func.stopTava();
+
+
+            func.moveRight(0.5);
+            sleep(2000);
+            func.stopRobot();
+
+            func.lasaTava();
+            sleep(500);
+            func.stopTava();
+
+
+            func.moveBackwards(0.5);
+            sleep(5000);
+            func.stopRobot();
+
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
         }
 
-       //rotire dreapta 1 sec
 
-        func.rotateRight(0.5);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0))
-        {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
-        //merge in fata 2 sec
-
-        func.moveForward(0.5);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2.0))
-        {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-//apuca tava
-        try{func.apucaTava();}catch(Exception e){}
-
-//merge dreapta 3 sec
-        func.moveRight(0.5);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0))
-        {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-        //lasa tava
-        try{func.lasaTava();}catch(Exception e){}
-//merge spate 5 sec si parcheaza
-        func.moveBackwards(0.5);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 5.0))
-        {
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
     }
 }

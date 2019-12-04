@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.vuforia.CameraDevice;
 import com.vuforia.HINT;
 import com.vuforia.Vuforia;
 
@@ -49,6 +50,8 @@ public class VuforiaTest extends LinearOpMode
 
         while(opModeIsActive())
         {
+            CameraDevice.getInstance().setFlashTorchMode(true);
+
             for(VuforiaTrackable target : allTargets)
             {
                 OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)target.getListener()).getUpdatedRobotLocation();
@@ -57,21 +60,40 @@ public class VuforiaTest extends LinearOpMode
                 {
                     VectorF translation = pose.getTranslation();
 
-                    if(translation.get(2) > 200)
-                    {
-                        func.moveForward(0.8);
-                    }
-                    else func.stopRobot();
 
+                    /**if(translation.get(2) > 200)
+                     {
+                     func.moveForward(0.8);
+                     }
+                     else func.stopRobot();
+                     */
 
                     telemetry.addData(target.getName() + "-Translation(X, Y, Z)", translation);
 
-                    double degreesToTurn = Math.toDegrees(Math.atan2(translation.get(0), translation.get(2)));
+                    double degreesToTurn = (Math.atan2(translation.get(0), translation.get(2)));
+
+                    double oriz = -Math.sin(degreesToTurn);
+                    double vert = Math.cos(degreesToTurn);
+
+                    double powerFL = -vert - oriz;
+                    double powerFR = vert - oriz;
+                    double powerBL = -vert + oriz;
+                    double powerBR = vert + oriz;
+
+                    if(translation.get(2) > 200)
+                    {
+                        func.move(powerFR, powerFL, powerBR, powerBL);
+                    }
+                    else func.stopRobot();
+
+                    telemetry.addData("Sinus: ", vert);
+                    telemetry.addData("Cosinus: ", oriz);
                     telemetry.addData("Degrees To Turn: ", degreesToTurn);
                 }else func.stopRobot();
             }
             telemetry.update();
         }
+        CameraDevice.getInstance().setFlashTorchMode(false);
         allTargets.deactivate();
     }
 }
