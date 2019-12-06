@@ -57,16 +57,13 @@ public class TestTeleOp extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-
     private DcMotor frontLeft = null;
     private DcMotor frontRight = null;
     private DcMotor backLeft = null;
     private DcMotor backRight = null;
-
-    private DcMotor motorLift = null;
-
-    private DcMotor clawMainMotor = null;
-    private DcMotor clawSecMotor = null;
+    private DcMotor motor1 = null;
+    private DcMotor motor2 = null;
+    private DcMotor motor3 = null;
 
     @Override
     public void runOpMode() {
@@ -78,11 +75,11 @@ public class TestTeleOp extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         frontLeft  = hardwareMap.get(DcMotor.class, "fl_motor");
         frontRight = hardwareMap.get(DcMotor.class, "fr_motor");
-        backLeft  = hardwareMap.get(DcMotor.class, "bl_motor");
-        backRight = hardwareMap.get(DcMotor.class, "br_motor");
-        motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
-        clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
-        clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
+        backLeft  = hardwareMap.get(DcMotor.class, "fl_motor");
+        backRight = hardwareMap.get(DcMotor.class, "fr_motor");
+        motor1 = hardwareMap.get(DcMotor.class, "motor1");
+        motor2  = hardwareMap.get(DcMotor.class, "motor2");
+        motor3 = hardwareMap.get(DcMotor.class, "motor3");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -90,29 +87,28 @@ public class TestTeleOp extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-        motorLift.setDirection(DcMotor.Direction.FORWARD);
-        clawMainMotor.setDirection(DcMotor.Direction.FORWARD);
-        clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
+        motor1.setDirection(DcMotor.Direction.FORWARD);
+        motor2.setDirection(DcMotor.Direction.FORWARD);
+        motor3.setDirection(DcMotor.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
-        double omniSurpress = 0.4;
+        double  omniSurpress = 0.3;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
             //omni
-            double gamepadRightY = -gamepad2.right_stick_y;
+            double gamepadLeftY = -gamepad2.right_stick_y;
             double gamepadLeftX = gamepad2.right_stick_x;
-            double gamepadLeftTrigger = -gamepad2.left_trigger;
-            double gamepadRightTrigger = gamepad2.right_trigger;
+            double gamepadRightX = gamepad2.left_stick_x;
 
-            double powerFrontLeft = -gamepadRightY - gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
-            double powerFrontRight = gamepadRightY - gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
-            double powerBackLeft = -gamepadRightY + gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
-            double powerBackRight = gamepadRightY + gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
+            double powerFrontLeft = -gamepadLeftY - gamepadLeftX - gamepadRightX;
+            double powerFrontRight = gamepadLeftY - gamepadLeftX - gamepadRightX;
+            double powerBackLeft = -gamepadLeftY + gamepadLeftX - gamepadRightX;
+            double powerBackRight = gamepadLeftY + gamepadLeftX - gamepadRightX;
 
             double powerLatchingUp = -gamepad1.right_trigger;
             double powerLatchingDown = gamepad1.left_trigger;
@@ -126,13 +122,13 @@ public class TestTeleOp extends LinearOpMode {
 
 
 
-           if (gamepad2.right_bumper == true) {
+           /* if (gamepad2.right_bumper == true) {
                 powerFrontLeft = powerFrontLeft *   omniSurpress;
                 powerBackLeft = powerBackLeft *     omniSurpress;
                 powerFrontRight = powerFrontRight * omniSurpress;
                 powerBackRight = powerBackRight *   omniSurpress;
 
-            }
+            }*/
 
             frontLeft.setPower(powerFrontLeft);
             frontRight.setPower(powerFrontRight);
@@ -141,43 +137,37 @@ public class TestTeleOp extends LinearOpMode {
             //omni
 
             //lift
-            motorLift.setPower(powerLatchingUp);
-            motorLift.setPower(powerLatchingDown);
+            motor1.setPower(powerLatchingUp);
+            motor1.setPower(powerLatchingDown);
             //lift
 
             //claws
-            if(gamepad1.y==true)
+            if(gamepad1.dpad_up==true)
             {
-                clawMainMotor.setPower(0.5);
+                motor2.setPower(0.5);
             }
-            else if(gamepad1.a==true)
+            else if(gamepad1.dpad_down==true)
             {
-                clawMainMotor.setPower(-0.5);
+                motor2.setPower(-0.5);
             }
             else {
-                clawMainMotor.setPower(0.0);
+                motor2.setPower(0.0);
             }
-
-            if(gamepad1.dpad_down==true)
+            if(gamepad1.dpad_left==true)
             {
-                clawSecMotor.setPower(0.5);
+                motor3.setPower(0.5);
             }
-            else if(gamepad1.dpad_up==true)
+            else if(gamepad1.dpad_right==true)
             {
-                clawSecMotor.setPower(-0.5);
+                motor3.setPower(-0.5);
             }
             else {
-                clawSecMotor.setPower(0.0);
+                motor3.setPower(0.0);
             }
             //claws
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Front Left Power", ": " + powerFrontLeft);
-            telemetry.addData("Front Right Power", ": " + powerFrontRight);
-            telemetry.addData("Back Left Power", ": " + powerBackLeft);
-            telemetry.addData("Back Right Power", ": " + powerBackRight);
-
             telemetry.update();
         }
     }
