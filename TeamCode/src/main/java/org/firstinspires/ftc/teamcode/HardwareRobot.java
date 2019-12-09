@@ -8,6 +8,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class HardwareRobot
 {
+    //private enum RunMode
+    //{
+    //    POWER,
+    //    ENCODER
+    //}
+
     public DcMotor frontLeft;
     public DcMotor frontRight;
     public DcMotor backLeft;
@@ -16,7 +22,7 @@ public class HardwareRobot
     public DcMotor motorLift;
 
     public DcMotor clawMainMotor;
-    public DcMotor clawSecMotor;
+    //public DcMotor clawSecMotor;
 
     public void initFromMap(HardwareMap hardwareMap)
     {
@@ -28,7 +34,7 @@ public class HardwareRobot
         motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
 
         clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
-        clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
+        //clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
 
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -36,18 +42,75 @@ public class HardwareRobot
         backRight.setDirection(DcMotor.Direction.FORWARD);
 
         motorLift.setDirection(DcMotor.Direction.FORWARD);
+        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         clawMainMotor.setDirection(DcMotor.Direction.FORWARD);
-        clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
+        clawMainMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        //clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        stopReset();
+    }
+
+    private void stopReset()
+    {
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    private void stopResetLift()
+    {
+        motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    private void setRunToPos()
+    {
+        //switch(mode)
+        //{
+        //    case POWER:
+        //
+        //}
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public boolean isBusy()
+    {
+        return (frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy());
     }
 
     public void moveForward(double power)
     {
+        //frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeft.setPower(power);
         frontRight.setPower(power);
         backLeft.setPower(power);
         backRight.setPower(power);
     }
+
+    public void moveForward(double power, int rot)
+    {
+        stopReset();
+
+        frontLeft.setTargetPosition(-rot);
+        frontRight.setTargetPosition(-rot);
+        backLeft.setTargetPosition(-rot);
+        backRight.setTargetPosition(-rot);
+
+        setRunToPos();
+
+        moveForward(power);
+    }
+
+    //public void moveForward(double distance, double time)
 
     public void moveBackwards(double power)
     {
@@ -97,6 +160,16 @@ public class HardwareRobot
         backRight.setPower(0.0);
     }
 
+    public void liftUp(double power)
+    {
+        motorLift.setPower(power);
+    }
+
+    public void liftUp(int rot)
+    {
+        stopReset();
+    }
+
     public void move(double powerFR, double powerFL, double powerBR, double powerBL)
     {
         frontLeft.setPower(powerFL);
@@ -105,7 +178,7 @@ public class HardwareRobot
         backRight.setPower(powerBR);
     }
 
-    public void apucaTava()
+    /*public void apucaTava()
     {
         clawSecMotor.setPower(-0.5);
     }
@@ -119,7 +192,7 @@ public class HardwareRobot
     {
         clawSecMotor.setPower(0.5);
     }
-
+    */
     public void moveLift(double power)
     {
         motorLift.setPower(power);
