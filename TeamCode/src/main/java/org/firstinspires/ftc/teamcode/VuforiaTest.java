@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.CameraDevice;
 import com.vuforia.HINT;
 import com.vuforia.Vuforia;
@@ -9,21 +10,24 @@ import com.vuforia.Vuforia;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@Autonomous(name="VuforiaTest", group ="Concept")
-
+@Autonomous(name="VuforiaTest123", group ="concept")
+//@Disabled
 public class VuforiaTest extends LinearOpMode
 {
     private HardwareRobot func = null;
 
     @Override
-    public void runOpMode() throws InterruptedException
+    public void runOpMode()
     {
-
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
@@ -54,11 +58,14 @@ public class VuforiaTest extends LinearOpMode
 
             for(VuforiaTrackable target : allTargets)
             {
+                //OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)target.getListener()).getUpdatedRobotLocation();
                 OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)target.getListener()).getUpdatedRobotLocation();
-
                 if(pose != null)
                 {
                     VectorF translation = pose.getTranslation();
+
+                    Orientation rotation = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS);
+                    telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
 
 
                     /**if(translation.get(2) > 200)
@@ -75,16 +82,16 @@ public class VuforiaTest extends LinearOpMode
                     double oriz = -Math.sin(degreesToTurn);
                     double vert = Math.cos(degreesToTurn);
 
-                    double powerFL = -vert - oriz;
+                    double powerFL = vert + oriz;
                     double powerFR = vert - oriz;
-                    double powerBL = -vert + oriz;
+                    double powerBL = vert - oriz;
                     double powerBR = vert + oriz;
 
-                    if(translation.get(2) > 200)
-                    {
-                        func.move(powerFR, powerFL, powerBR, powerBL);
-                    }
-                    else func.stopRobot();
+                    //if(translation.get(2) > 200)
+                    //{
+                       // func.move(powerFR, powerFL, powerBR, powerBL);
+                   // }
+                   // else func.stopRobot();
 
                     telemetry.addData("Sinus: ", vert);
                     telemetry.addData("Cosinus: ", oriz);

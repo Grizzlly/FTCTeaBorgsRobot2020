@@ -50,7 +50,6 @@ import com.qualcomm.robotcore.util.Range;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-
 @TeleOp(name="TestTeleOp", group="Linear Opmode")
 //@Disabled
 public class TestTeleOp extends LinearOpMode {
@@ -66,7 +65,12 @@ public class TestTeleOp extends LinearOpMode {
     private DcMotor motorLift = null;
 
     private DcMotor clawMainMotor = null;
-    private DcMotor clawSecMotor = null;
+    //private DcMotor clawSecMotor = null;
+
+    private final double MaxRots = 5000;
+
+    private final int CPR = 1112;
+    boolean reached = false;
 
     @Override
     public void runOpMode() {
@@ -82,23 +86,41 @@ public class TestTeleOp extends LinearOpMode {
         backRight = hardwareMap.get(DcMotor.class, "br_motor");
         motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
         clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
-        clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
+        //clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+
         motorLift.setDirection(DcMotor.Direction.FORWARD);
-        clawMainMotor.setDirection(DcMotor.Direction.FORWARD);
-        clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
+        motorLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        clawMainMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        clawMainMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        //clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        //frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
-        double omniSurpress = 0.4;
+        double  omniSurpress = 0.4;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -121,12 +143,12 @@ public class TestTeleOp extends LinearOpMode {
             powerFrontRight = Range.clip(powerFrontRight, -1, 1);
             powerBackLeft = Range.clip(powerBackLeft, -1, 1);
             powerBackRight = Range.clip(powerBackRight, -1, 1);
-            powerLatchingUp = Range.clip(powerLatchingUp, -1, 1);
-            powerLatchingDown = Range.clip(powerLatchingDown, -1, 1);
+            powerLatchingUp = Range.clip(powerLatchingUp, -0.7, 0.7);
+            powerLatchingDown = Range.clip(powerLatchingDown, -0.7, 0.7);
 
 
 
-           if (gamepad2.right_bumper == true) {
+            if (gamepad2.right_bumper == true) {
                 powerFrontLeft = powerFrontLeft *   omniSurpress;
                 powerBackLeft = powerBackLeft *     omniSurpress;
                 powerFrontRight = powerFrontRight * omniSurpress;
@@ -134,18 +156,44 @@ public class TestTeleOp extends LinearOpMode {
 
             }
 
+            //frontLeft.setTargetPosition(800);
+            //frontRight.setTargetPosition(800);
+            //backLeft.setTargetPosition(800);
+            //backRight.setTargetPosition(800);
+
             frontLeft.setPower(powerFrontLeft);
             frontRight.setPower(powerFrontRight);
             backLeft.setPower(powerBackLeft);
             backRight.setPower(powerBackRight);
             //omni
+            //if(frontRight.isBusy() || frontLeft.isBusy() || backRight.isBusy() || backLeft.isBusy())sleep(5000);
+            //lift
+            if(motorLift.getCurrentPosition()<=CPR/4) powerLatchingUp=0;
 
-            //lift
-            motorLift.setPower(powerLatchingUp);
-            motorLift.setPower(powerLatchingDown);
-            //lift
+            if(motorLift.getCurrentPosition()>=5400) powerLatchingDown=0;
+
+            if((powerLatchingUp==0 && powerLatchingDown==0))
+            {
+                motorLift.setTargetPosition(motorLift.getCurrentPosition());
+                motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorLift.setPower(1);
+            }
+            else motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            if(powerLatchingUp !=0)
+                motorLift.setPower(powerLatchingUp);
+            else if(powerLatchingDown == 0)
+                motorLift.setPower(0);
+            if(powerLatchingDown !=0)
+                motorLift.setPower(powerLatchingDown);
+            else if(powerLatchingUp == 0)
+                motorLift.setPower(0);
+
+
 
             //claws
+
+
             if(gamepad1.y==true)
             {
                 clawMainMotor.setPower(0.5);
@@ -158,25 +206,26 @@ public class TestTeleOp extends LinearOpMode {
                 clawMainMotor.setPower(0.0);
             }
 
-            if(gamepad1.dpad_down==true)
-            {
-                clawSecMotor.setPower(0.5);
-            }
-            else if(gamepad1.dpad_up==true)
-            {
-                clawSecMotor.setPower(-0.5);
-            }
-            else {
-                clawSecMotor.setPower(0.0);
-            }
+            //if(gamepad1.dpad_down==true)
+            //{
+            //   clawSecMotor.setPower(0.5);
+            //}
+            //else if(gamepad1.dpad_up==true)
+            //{
+            //    clawSecMotor.setPower(-0.5);
+            //}
+            //else {
+            //    clawSecMotor.setPower(0.0);
+            //}
             //claws
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Front Left Power", ": " + powerFrontLeft);
-            telemetry.addData("Front Right Power", ": " + powerFrontRight);
-            telemetry.addData("Back Left Power", ": " + powerBackLeft);
-            telemetry.addData("Back Right Power", ": " + powerBackRight);
+            telemetry.addData("Front Left Pos", ": " + frontLeft.getCurrentPosition());
+            telemetry.addData("Front Right Pos", ": " + frontRight.getCurrentPosition());
+            telemetry.addData("Back Left Pos", ": " + backLeft.getCurrentPosition());
+            telemetry.addData("Back Right Pos", ": " + backRight.getCurrentPosition());
+            telemetry.addData("lift Pos", ": " + motorLift.getCurrentPosition());
 
             telemetry.update();
         }

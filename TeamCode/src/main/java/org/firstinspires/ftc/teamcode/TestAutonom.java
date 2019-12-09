@@ -96,18 +96,18 @@ public class TestAutonom extends LinearOpMode {
             sleep(3000);
             func.stopRobot();
 
-            func.apucaTava();
-            sleep(500);
-            func.stopTava();
+           // func.apucaTava();
+            //sleep(500);
+           // func.stopTava();
 
 
             func.moveRight(0.5);
             sleep(2000);
             func.stopRobot();
 
-            func.lasaTava();
-            sleep(500);
-            func.stopTava();
+           // func.lasaTava();
+            //sleep(500);
+           // func.stopTava();
 
 
             func.moveBackwards(0.5);
