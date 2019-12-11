@@ -231,7 +231,7 @@ public class TestTeleOp extends LinearOpMode {
                clawSecMotor.setPower(0.0);
             }
             //claws
-            recorder.Step();
+            recorder.Step(runtime.time());
 
             if(gamepad2.x) {
                 frontLeft.setPower(0.0);

@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.os.Environment;
+
+import org.firstinspires.ftc.robotcore.external.Func;
+import org.firstinspires.ftc.robotcore.external.Function;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.json.JSONArray;
@@ -14,7 +17,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -78,7 +83,7 @@ public class HardwareRecorder
             recording = false;}
     }
 
-    public void Step()
+    public void Step(double time)
     {
         if(recording)
         {
@@ -91,6 +96,8 @@ public class HardwareRecorder
                 //ja.put(motor.getPower());
             }
 
+            jag.add(time);
+
             //jo.put(String.valueOf(ticks), ja);
             gsonobj.add(String.valueOf(ticks), jag);
         }
@@ -99,6 +106,8 @@ public class HardwareRecorder
 
     public void Play(Telemetry telemetry) throws FileNotFoundException
     {
+        ElapsedTime runtime = new ElapsedTime();
+
         File dir = Environment.getExternalStorageDirectory();
         file = new File(dir, "testf.json");
 
