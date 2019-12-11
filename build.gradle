@@ -20,5 +20,6 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven { url 'https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple/1.1.1' }
     }
 }
