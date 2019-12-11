@@ -15,57 +15,79 @@ public class autonom1 extends LinearOpMode {
     private int pozitie;
     static final int COUNTS = 1112;
 
-    public definitieRobot robot = new definitieRobot();
+    public definitieRobot func = new definitieRobot();
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        robot.init(hardwareMap);
+        func.init(hardwareMap);
 
-        robot.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        func.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        func.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        func.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        func.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         if(opModeIsActive()) {
-            /*robot.move_front(1.0,860);
-            WAIT(true);
-            robot.rotate_left(0.5,800);
-            WAIT(true);
-            robot.move_front(0.5,650);
-            WAIT(true);
-            robot.move_left(0.5,2900);
-            WAIT(true);
-            robot.rotate_left(0.5, 1330);
-            WAIT(true);
-            //WAIT(true);
-            ///waiting de o sec
-            robot.move_back(1.0,3300);
-            WAIT(true);
+            func.init(hardwareMap);
 
-            robot.rotate_left(1.0,1420);
-            WAIT(true);
-            robot.move_back(1.0,3000);
-            WAIT(true);
-            */
+            func.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            func.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            func.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            func.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            waitForStart();
+            runtime.reset();
+            func.move_left(0.5,2981, 2967, 2940, 2890);
+            WAIT();
+            func.resetDrives();
+            func.clawSecMotor.setPower(-0.4);
+            sleep(1500);
+
+            func.move_right(0.5, 2781, 2767, 2740, 2690);
+            WAIT();
+            func.resetDrives();
+
+            sleep(1000);
+
+            while(runtime.seconds() < 0.5);
+                func.clawSecMotor.setPower(0.4);
+
+            sleep(1000);
+
+            func.clawSecMotor.setPower(0.0);
+
+            sleep(1000);
+
+            func.move_back(0.5,1346, 1504, 2316, 1865);
+            WAIT();
+            func.resetDrives();
+
+            sleep(1000);
+
+            func.rotate_right(0.5,162, 133, 180, 164);
+            WAIT();
+            func.resetDrives();
+
+            sleep(1000);
+
+            func.move_back(0.5,2282, 2394, 2680, 2639);
+            WAIT();
+            func.resetDrives();
         }
     }
 
-    public void WAIT(boolean busy){
-        if(busy == true)
-            while (opModeIsActive() && robot.isBusy()) {
-
-            }
-
-        /*else
-            while(opModeIsActive() && !robot.positionReached()){
-
-            }*/
-
-        robot.resetDrives();
+    public void WAIT() {
+        while (!(func.frontLeft.getTargetPosition()-100 <= func.frontLeft.getCurrentPosition() && func.frontLeft.getCurrentPosition() <= func.frontLeft.getTargetPosition()+100)) {
+            /*telemetry.addData("", robot.frontLeft.getCurrentPosition()/1112*3.14*10);
+            telemetry.addData("", robot.frontRight.getCurrentPosition());
+            telemetry.addData("", robot.backLeft.getCurrentPosition());
+            telemetry.addData("", robot.backRight.getCurrentPosition());
+            telemetry.addData("", robot.DrivingTarget);
+            telemetry.update();*/
+        }
     }
 
 }

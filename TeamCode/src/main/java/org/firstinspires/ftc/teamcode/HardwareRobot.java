@@ -21,6 +21,10 @@ public class HardwareRobot
 
     public DcMotor motorLift;
 
+    double circumferinta = Math.PI*10;
+    double rotatii;
+    int DrivingTarget;
+
     public DcMotor clawMainMotor;
     //public DcMotor clawSecMotor;
 
@@ -77,6 +81,7 @@ public class HardwareRobot
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //frontLeft.get
     }
 
     public boolean isBusy()
@@ -84,30 +89,65 @@ public class HardwareRobot
         return (frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy());
     }
 
+    public boolean isBusy(int targetPos)
+    {
+        return !(targetPos<=10+Math.abs(frontLeft.getCurrentPosition()));
+    }
+
     public void moveForward(double power)
     {
-        //frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeft.setPower(power);
         frontRight.setPower(power);
         backLeft.setPower(power);
         backRight.setPower(power);
     }
 
-    public void moveForward(double power, int rot)
+    public void moveForward(double power, int distanta)
     {
+        rotatii = distanta/circumferinta;
+        DrivingTarget = (int)(rotatii*1120);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         stopReset();
+        setRunToPos();
 
-        frontLeft.setTargetPosition(-rot);
-        frontRight.setTargetPosition(-rot);
-        backLeft.setTargetPosition(-rot);
-        backRight.setTargetPosition(-rot);
-
+        frontLeft.setTargetPosition(-DrivingTarget);
+        frontRight.setTargetPosition(-DrivingTarget);
+        backLeft.setTargetPosition(-DrivingTarget);
+        backRight.setTargetPosition(-DrivingTarget);
         setRunToPos();
 
         moveForward(power);
+    }
+
+    public void moveBack(double power, int distanta)
+    {
+        rotatii = distanta/circumferinta;
+        DrivingTarget = (int)(rotatii*1120);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        stopReset();
+        setRunToPos();
+
+        frontLeft.setTargetPosition(-DrivingTarget);
+        frontRight.setTargetPosition(-DrivingTarget);
+        backLeft.setTargetPosition(-DrivingTarget);
+        backRight.setTargetPosition(-DrivingTarget);
+        setRunToPos();
+
+        moveBackwards(power);
     }
 
     //public void moveForward(double distance, double time)
