@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.os.Environment;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import org.json.JSONArray;
 //import org.json.JSONException;
 //import org.json.JSONObject;
@@ -10,6 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.io.File;
@@ -45,12 +49,17 @@ public class HardwareRecorder
         dcMotors=objects;
     }
 
-    public void StartRecording() throws FileNotFoundException, IOException
+    public void StartRecording() throws IOException
     {
-        file = new File(name+".json");
+        File dir = Environment.getExternalStorageDirectory();
+        file = new File(dir, "testf.json");
         file.createNewFile();
+        file.setWritable(true);
+        file.setReadable(true);
 
         pw = new PrintWriter(file);
+
+        gsonobj = new JsonObject();
 
         ticks = 0;
         recording = true;
@@ -58,14 +67,15 @@ public class HardwareRecorder
 
     public void StopRecording()
     {
-        //jo.put("TotalTicks", ticks);
-        gsonobj.addProperty("TotalTicks", ticks);
-        pw.print(gsonobj.toString());
+        if(recording){
+            //jo.put("TotalTicks", ticks);
+            gsonobj.addProperty("TotalTicks", ticks);
+            pw.print(gsonobj.toString());
 
-        pw.flush();
-        pw.close();
+            pw.flush();
+            pw.close();
 
-        recording = false;
+            recording = false;}
     }
 
     public void Step()
@@ -84,13 +94,43 @@ public class HardwareRecorder
             //jo.put(String.valueOf(ticks), ja);
             gsonobj.add(String.valueOf(ticks), jag);
         }
+        ticks++;
     }
 
-    public void Play() throws FileNotFoundException
+    public void Play(Telemetry telemetry) throws FileNotFoundException
     {
-        Object object = new JsonParser().parse(new FileReader(name));
+        File dir = Environment.getExternalStorageDirectory();
+        file = new File(dir, "testf.json");
 
-        JsonObject gson = (JsonObject) object;
+        //Object object = new JsonParser().parse(file.getAbsolutePath());
+        //JsonReader gsonr = new JsonReader(new FileReader(file));
+
+        JsonParser jsonParser = new JsonParser();
+
+        JsonObject jsonObject = jsonParser.parse(new FileReader(file)).getAsJsonObject();
+
+
+        try{
+            //DcMotorReader reader = gson.fromJson(gsonr, DcMotorReader.class);
+
+
+
+            int totalticks = jsonObject.get("TotalTicks").getAsInt();
+            telemetry.addLine(String.valueOf(totalticks));telemetry.update();
+
+
+            for(int i=0; i<totalticks; i++)
+            {
+                JsonArray arr = jsonObject.getAsJsonArray(String.valueOf(i));
+                for(int j=0; j<arr.size(); j++)
+                {
+                    dcMotors[j].setPower(arr.get(j).getAsDouble());
+                    telemetry.addData("Motor"+j, dcMotors[j].getPower());
+
+                    telemetry.update();
+
+                }
+            }}catch(Exception e){telemetry.addLine(e.getMessage());telemetry.update();}
 
     }
     //TODO: FINISH!!!

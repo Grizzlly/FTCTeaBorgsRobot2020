@@ -35,89 +35,67 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-/**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
+
 
 @Autonomous(name="Basic: Linear OpMode", group="Linear Opmode")
-//@Disabled
-public class TestAutonom extends LinearOpMode {
-    private HardwareRobot func = null;
 
-    // Declare OpMode members.
+public class TestAutonom extends LinearOpMode {
+   // private HardwareRobot func = null;
+
+
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    public definitieRobot func = new definitieRobot();
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        //leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        //rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        func.init(hardwareMap);
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        //leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        //rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        func.frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        func.frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        func.backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        func.backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        func = new HardwareRobot();
-        func.initFromMap(hardwareMap);
-
-        // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        runtime.reset();
+        func.move_left(0.5,2981, 2967, 2940, 2890);
+        WAIT();
+        func.resetDrives();
 
-       //merge in fata 3 sec
+        sleep(1000);
+        func.clawSecMotor.setPower(0.4);
 
-        while (opModeIsActive())
-        {
-            func.moveForward(0.5);
-            sleep(4000);
-            func.stopRobot();
+        func.move_right(0.5, 2781, 2767, 2740, 2690);
+        WAIT();
+        func.resetDrives();
 
-            func.rotateRight(0.5);
-            sleep(1000);
-            func.stopRobot();
+        func.move_back(0.5,1346, 1504, 2316, 1865);
+        WAIT();
+        func.resetDrives();
 
-            func.moveForward(0.5);
-            sleep(3000);
-            func.stopRobot();
+        sleep(1000);
 
-           // func.apucaTava();
-            //sleep(500);
-           // func.stopTava();
+        func.clawSecMotor.setPower(0.0);
 
+        sleep(1000);
 
-            func.moveRight(0.5);
-            sleep(2000);
-            func.stopRobot();
+        func.rotate_right(0.5,162, 133, 180, 164);
+        WAIT();
+        func.resetDrives();
 
-           // func.lasaTava();
-            //sleep(500);
-           // func.stopTava();
+        sleep(1000);
 
-
-            func.moveBackwards(0.5);
-            sleep(5000);
-            func.stopRobot();
-
-            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
-
+        func.move_back(0.5,2282, 2394, 2680, 2639);
+        WAIT();
+        func.resetDrives();
 
     }
+    public void WAIT() {
+        while (func.isBusy()) {
+
+        }
+    }
+
 }

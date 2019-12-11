@@ -13,9 +13,13 @@ public class definitieRobot {
     public DcMotor frontRight = null;
     public DcMotor backLeft = null;
     public DcMotor backRight = null;
-    public DcMotor latchingLeft = null;
-    public DcMotor latchingRight = null;
+    public DcMotor liftMotor = null;
+    public DcMotor clawSecMotor = null;
     public DcMotor cup = null;
+
+    double circumferinta = Math.PI*10;
+    double rotatii;
+    int DrivingTarget;
     //////////////////////////////////////////////////////
 
     /* local OpMode members. */
@@ -38,24 +42,26 @@ public class definitieRobot {
         frontRight = hwMap.get(DcMotor.class, "fr_motor");
         backLeft = hwMap.get(DcMotor.class, "bl_motor");
         backRight = hwMap.get(DcMotor.class, "br_motor");
-
+        clawSecMotor = hwMap.get(DcMotor.class, "clawSecMotor");
 
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
+        clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    void move_back(double power, int rots) {
+    void move_front(double power, int t1, int t2, int t3, int t4) {
+
+        frontLeft.setTargetPosition(-t1);
+        frontRight.setTargetPosition(-t2);
+        backLeft.setTargetPosition(-t3);
+        backRight.setTargetPosition(-t4);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontLeft.setTargetPosition(rots);
-        frontRight.setTargetPosition(rots);
-        backLeft.setTargetPosition(rots);
-        backRight.setTargetPosition(rots);
 
         frontLeft.setPower(power);
         frontRight.setPower(power);
@@ -65,16 +71,17 @@ public class definitieRobot {
 
     }
 
-    void move_front(double power, int rots) {
+    void move_back(double power, int t1, int t2, int t3, int t4) {
+
+        frontLeft.setTargetPosition(t1);
+        frontRight.setTargetPosition(t2);
+        backLeft.setTargetPosition(t3);
+        backRight.setTargetPosition(t4);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontLeft.setTargetPosition(-rots);
-        frontRight.setTargetPosition(-rots);
-        backLeft.setTargetPosition(-rots);
-        backRight.setTargetPosition(-rots);
 
         frontLeft.setPower(-power);
         frontRight.setPower(-power);
@@ -83,36 +90,37 @@ public class definitieRobot {
 
     }
 
-    void move_right(double power, int rots) {
+    void move_right(double power, int t1, int t2, int t3, int t4) {
+
+        frontLeft.setTargetPosition(-t1);
+        frontRight.setTargetPosition(t2);
+        backLeft.setTargetPosition(t3);
+        backRight.setTargetPosition(-t4);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontLeft.setTargetPosition(-rots);
-        frontRight.setTargetPosition(rots);
-        backLeft.setTargetPosition(rots);
-        backRight.setTargetPosition(-rots);
 
         frontLeft.setPower(-power);
         frontRight.setPower(power);
         backLeft.setPower(power);
         backRight.setPower(-power);
 
-
     }
 
-    void move_left(double power, int rots) {
+    void move_left(double power, int t1, int t2, int t3, int t4) {
+
+        frontLeft.setTargetPosition(t1);
+        frontRight.setTargetPosition(-t2);
+        backLeft.setTargetPosition(-t3);
+        backRight.setTargetPosition(t4);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-
-        frontLeft.setTargetPosition(rots);
-        frontRight.setTargetPosition(-rots);
-        backLeft.setTargetPosition(-rots);
-        backRight.setTargetPosition(rots);
 
         frontLeft.setPower(power);
         frontRight.setPower(-power);
@@ -120,64 +128,66 @@ public class definitieRobot {
         backRight.setPower(power);
     }
 
-    void move_front_right(double power, int rots) {
+    /*void move_front_right(double power, int t1, int t4) {
+
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontRight.setTargetPosition(-rots);
-        backLeft.setTargetPosition(-rots);
+        frontLeft.setTargetPosition(-t1);
+        backRight.setTargetPosition(-t4);
 
         frontRight.setPower(power);
         backLeft.setPower(power);
     }
 
-    void move_front_left(double power, int rots) {
+    void move_front_left(double power, int t1, int t2, int t3, int t4) {
+
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setTargetPosition(-rots);
-        backRight.setTargetPosition(-rots);
+        frontLeft.setTargetPosition(-DrivingTarget);
+        backRight.setTargetPosition(-DrivingTarget);
 
         frontLeft.setPower(power);
         backRight.setPower(power);
     }
 
-    void move_back_left(double power, int rots) {
-
+    void move_back_left(double power, int t1, int t2, int t3, int t4) {
 
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontRight.setTargetPosition(-rots);
-        backLeft.setTargetPosition(-rots);
+        frontRight.setTargetPosition(-DrivingTarget);
+        backLeft.setTargetPosition(-DrivingTarget);
 
         frontRight.setPower(-power);
         backLeft.setPower(-power);
     }
 
-    void move_back_right(double power, int rots) {
+    void move_back_right(double power, int t1, int t2, int t3, int t4) {
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setTargetPosition(-rots);
-        backRight.setTargetPosition(-rots);
+        frontLeft.setTargetPosition(-DrivingTarget);
+        backRight.setTargetPosition(-DrivingTarget);
 
         frontLeft.setPower(-power);
         backRight.setPower(-power);
-    }
+    }*/
 
-    void rotate_right(double power, int rots) {
+    void rotate_right(double power, int t1, int t2, int t3, int t4) {
+
+        frontLeft.setTargetPosition(-t1);
+        frontRight.setTargetPosition(t2);
+        backLeft.setTargetPosition(-t3);
+        backRight.setTargetPosition(t4);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        frontLeft.setTargetPosition(-rots);
-        frontRight.setTargetPosition(rots);
-        backLeft.setTargetPosition(-rots);
-        backRight.setTargetPosition(rots);
 
         frontLeft.setPower(-power);
         frontRight.setPower(power);
@@ -186,16 +196,17 @@ public class definitieRobot {
 
     }
 
-    void rotate_left(double power, int rots) {
+    void rotate_left(double power, int t1, int t2, int t3, int t4) {
+
+        frontLeft.setTargetPosition(t1);
+        frontRight.setTargetPosition(-t2);
+        backLeft.setTargetPosition(t3);
+        backRight.setTargetPosition(-t4);
+
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        frontLeft.setTargetPosition(rots);
-        frontRight.setTargetPosition(-rots);
-        backLeft.setTargetPosition(rots);
-        backRight.setTargetPosition(-rots);
 
         frontLeft.setPower(power);
         frontRight.setPower(-power);
@@ -219,10 +230,11 @@ public class definitieRobot {
     }
 
     boolean isBusy() {
-        if (frontLeft.isBusy()) return true;
-        if (frontRight.isBusy()) return true;
-        if (backLeft.isBusy()) return true;
-        if (backRight.isBusy()) return true;
+        if (frontLeft.getCurrentPosition()<DrivingTarget-100) return true;
+        //if (frontRight.getCurrentPosition()<DrivingTarget-100) return true;
+        //if (backLeft.getCurrentPosition()<DrivingTarget-100) return true;
+        //if (backRight.getCurrentPosition()<DrivingTarget-100) return true;
+
         return false;
     }
 }

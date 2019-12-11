@@ -85,54 +85,66 @@ public class SensorREVColorDistance extends LinearOpMode {
      * to the target object.
      *
      */
-    ColorSensor sensorColor;
-    DistanceSensor sensorDistance;
+    ColorSensor colorSensor;    // Hardware Device Object
+    DistanceSensor distanceSensor;
 
     @Override
     public void runOpMode() {
-
-        // get a reference to the color sensor.
-        sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color_distance");
-
-        // get a reference to the distance sensor that shares the same name.
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_color_distance");
-
         // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
+        float hsvValues[] = {0F,0F,0F};
 
         // values is a reference to the hsvValues array.
         final float values[] = hsvValues;
-
-        // sometimes it helps to multiply the raw RGB values with a scale factor
-        // to amplify/attentuate the measured values.
-        final double SCALE_FACTOR = 255;
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
+        // bPrevState and bCurrState represent the previous and current state of the button.
+        boolean bPrevState = false;
+        boolean bCurrState = false;
+
+        // bLedOn represents the state of the LED.
+        boolean bLedOn = true;
+
+        // get a reference to our ColorSensor object.
+        colorSensor = hardwareMap.get(ColorSensor.class, "sensor");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "sensor");
+
+        // Set the LED in the beginnilang
+        colorSensor.enableLed(bLedOn);
+
         // wait for the start button to be pressed.
         waitForStart();
 
-        // loop and read the RGB and distance data.
+        // while the op mode is active, loop and read the RGB data.
         // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
         while (opModeIsActive()) {
+
+            // check the status of the x button on either gamepad.
+            bCurrState = gamepad1.x;
+
+            // check for button state transitions.
+            if (bCurrState && (bCurrState != bPrevState))  {
+
+                // button is transitioning to a pressed state. So Toggle LED
+                bLedOn = !bLedOn;
+                colorSensor.enableLed(bLedOn);
+            }
+
+            // update previous state variable.
+            bPrevState = bCurrState;
+
             // convert the RGB values to HSV values.
-            // multiply by the SCALE_FACTOR.
-            // then cast it back to int (SCALE_FACTOR is a double)
-            Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
-                    (int) (sensorColor.green() * SCALE_FACTOR),
-                    (int) (sensorColor.blue() * SCALE_FACTOR),
-                    hsvValues);
+            Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
 
             // send the info back to driver station using telemetry function.
-            telemetry.addData("Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistance.getDistance(DistanceUnit.CM)));
-            telemetry.addData("Alpha", sensorColor.alpha());
-            telemetry.addData("Red  ", sensorColor.red());
-            telemetry.addData("Green", sensorColor.green());
-            telemetry.addData("Blue ", sensorColor.blue());
+            telemetry.addData("LED", bLedOn ? "On" : "Off");
+            telemetry.addData("Clear", colorSensor.alpha());
+            telemetry.addData("Red  ", colorSensor.red());
+            telemetry.addData("Green", colorSensor.green());
+            telemetry.addData("Blue ", colorSensor.blue());
             telemetry.addData("Hue", hsvValues[0]);
 
             // change the background color to match the color detected by the RGB sensor.
