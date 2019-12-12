@@ -40,20 +40,20 @@ public class autonom1 extends LinearOpMode {
 
             waitForStart();
             runtime.reset();
-            func.move_left(0.5,2981, 2967, 2940, 2890);
+            func.move_left(0.3, 2901, 2816, 2808, 2833);
             WAIT();
             func.resetDrives();
             func.clawSecMotor.setPower(-0.4);
             sleep(1500);
 
-            func.move_right(0.5, 2781, 2767, 2740, 2690);
+            func.move_right(0.5, 3181, 3565, 4153, 3529);
             WAIT();
             func.resetDrives();
 
             sleep(1000);
 
             while(runtime.seconds() < 0.5);
-                func.clawSecMotor.setPower(0.4);
+            func.clawSecMotor.setPower(0.4);
 
             sleep(1000);
 
@@ -61,19 +61,35 @@ public class autonom1 extends LinearOpMode {
 
             sleep(1000);
 
-            func.move_back(0.5,1346, 1504, 2316, 1865);
+            func.rotate_left(0.5, 354, 455, 385, 403);
             WAIT();
             func.resetDrives();
 
-            sleep(1000);
-
-            func.rotate_right(0.5,162, 133, 180, 164);
+            func.move_back(0.5, 2347, 2427, 2555, 2500);
             WAIT();
             func.resetDrives();
 
-            sleep(1000);
+            func.move_left(0.5, 1635, 1688, 1704, 1658);
+            WAIT();
+            func.resetDrives();
 
-            func.move_back(0.5,2282, 2394, 2680, 2639);
+            func.rotate_right(0.3, 204, 279, 203, 204);
+            WAIT();
+            func.resetDrives();
+
+            func.move_front(0.5, 962, 1021, 1103, 1140);
+            WAIT();
+            func.resetDrives();
+
+            func.rotate_left(0.3, 273, 167, 335, 228);
+            WAIT();
+            func.resetDrives();
+
+            func.move_right(0.5, 1250, 1406, 1492, 1382);
+            WAIT();
+            func.resetDrives();
+
+            func.move_back(0.5, 1870, 2074, 2149, 2037);
             WAIT();
             func.resetDrives();
         }

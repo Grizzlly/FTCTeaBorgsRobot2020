@@ -15,6 +15,7 @@ public class definitieRobot {
     public DcMotor backRight = null;
     public DcMotor liftMotor = null;
     public DcMotor clawSecMotor = null;
+    public DcMotor clawMainMotor = null;
     public DcMotor cup = null;
 
     double circumferinta = Math.PI*10;
@@ -43,12 +44,14 @@ public class definitieRobot {
         backLeft = hwMap.get(DcMotor.class, "bl_motor");
         backRight = hwMap.get(DcMotor.class, "br_motor");
         clawSecMotor = hwMap.get(DcMotor.class, "clawSecMotor");
+        clawMainMotor = hwMap.get(DcMotor.class, "clawMainMotor");
 
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
         clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
+        clawMainMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 
     void move_front(double power, int t1, int t2, int t3, int t4) {

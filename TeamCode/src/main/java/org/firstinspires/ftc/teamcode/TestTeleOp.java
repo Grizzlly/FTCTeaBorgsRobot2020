@@ -94,7 +94,7 @@ public class TestTeleOp extends LinearOpMode {
         clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
 
         recorder = new HardwareRecorder("TestTeleOP");
-        recorder.InitMotors(frontLeft, frontRight, backLeft, backRight, motorLift);
+        recorder.InitMotors(frontLeft, frontRight, backLeft, backRight);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -129,6 +129,7 @@ public class TestTeleOp extends LinearOpMode {
         try{
             recorder.StartRecording();}catch (IOException e){telemetry.addLine(e.getMessage());telemetry.update();}
         waitForStart();
+        long startTime= System.nanoTime();
         runtime.reset();
         //try{
         //recorder.StartRecording();}catch (Exception e){telemetry.addLine("Wrong");}
@@ -231,7 +232,9 @@ public class TestTeleOp extends LinearOpMode {
                clawSecMotor.setPower(0.0);
             }
             //claws
-            recorder.Step(runtime.time());
+
+            recorder.Step(System.nanoTime()-startTime);
+            startTime=System.nanoTime();
 
             if(gamepad2.x) {
                 frontLeft.setPower(0.0);

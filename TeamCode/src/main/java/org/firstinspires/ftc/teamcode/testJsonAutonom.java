@@ -33,19 +33,20 @@ public class testJsonAutonom extends LinearOpMode {
 
         recorder.InitMotors(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
         waitForStart();
-        while(opModeIsActive())
+        if(opModeIsActive())
         {
             try {
-                //recorder.Play();
+                recorder.Play(telemetry);
                 //telemetry.addLine("playing...");
                 //telemetry.update();
+
             }catch (Exception ex)
             {
                 telemetry.addLine(ex.getMessage());
                 telemetry.update();
             }
             runtime.reset();
-            while(runtime.seconds()<30){telemetry.addLine("playing...");telemetry.update();}
+            while(runtime.seconds()<30){}
 
         }
     }
