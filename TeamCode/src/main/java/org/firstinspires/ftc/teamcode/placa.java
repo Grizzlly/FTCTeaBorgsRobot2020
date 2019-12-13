@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 
 
 @TeleOp(name="placa", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class placa extends LinearOpMode {
 
     // Declare OpMode members.

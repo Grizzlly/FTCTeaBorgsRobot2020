@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -9,7 +10,7 @@ import java.io.FileNotFoundException;
 
 
 @Autonomous(name="testJsonAutonom", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class testJsonAutonom extends LinearOpMode {
 
     // Declare OpMode members.
@@ -33,19 +34,20 @@ public class testJsonAutonom extends LinearOpMode {
 
         recorder.InitMotors(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
         waitForStart();
-        while(opModeIsActive())
+        if(opModeIsActive())
         {
             try {
-                //recorder.Play();
+                recorder.Play(telemetry);
                 //telemetry.addLine("playing...");
                 //telemetry.update();
+
             }catch (Exception ex)
             {
                 telemetry.addLine(ex.getMessage());
                 telemetry.update();
             }
             runtime.reset();
-            while(runtime.seconds()<30){telemetry.addLine("playing...");telemetry.update();}
+            while(runtime.seconds()<30){}
 
         }
     }

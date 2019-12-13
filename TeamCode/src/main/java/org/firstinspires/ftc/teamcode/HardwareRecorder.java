@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.os.Environment;
+
+import org.firstinspires.ftc.robotcore.external.Func;
+import org.firstinspires.ftc.robotcore.external.Function;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.json.JSONArray;
@@ -14,7 +17,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -78,18 +83,28 @@ public class HardwareRecorder
             recording = false;}
     }
 
-    public void Step()
+    public void Step(double time)
     {
         if(recording)
         {
             //JSONArray ja = new JSONArray();
             JsonArray jag = new JsonArray();
 
-            for (DcMotor motor : dcMotors)
+
+            for(int i=0; i<dcMotors.length; i++)
             {
-                jag.add(motor.getPower());
-                //ja.put(motor.getPower());
+                jag.add(dcMotors[i].getPower());
             }
+
+            //for (DcMotor motor : dcMotors)
+            //{
+            //    jag.add(motor.getPower());
+            //ja.put(motor.getPower());
+            //}
+
+            jag.add(time);
+
+
 
             //jo.put(String.valueOf(ticks), ja);
             gsonobj.add(String.valueOf(ticks), jag);
@@ -99,6 +114,7 @@ public class HardwareRecorder
 
     public void Play(Telemetry telemetry) throws FileNotFoundException
     {
+
         File dir = Environment.getExternalStorageDirectory();
         file = new File(dir, "testf.json");
 
@@ -110,7 +126,8 @@ public class HardwareRecorder
         JsonObject jsonObject = jsonParser.parse(new FileReader(file)).getAsJsonObject();
 
 
-        try{
+        try
+        {
             //DcMotorReader reader = gson.fromJson(gsonr, DcMotorReader.class);
 
 
@@ -122,15 +139,31 @@ public class HardwareRecorder
             for(int i=0; i<totalticks; i++)
             {
                 JsonArray arr = jsonObject.getAsJsonArray(String.valueOf(i));
-                for(int j=0; j<arr.size(); j++)
+                //telemetry.addData("Array ", arr.toString());
+                //telemetry.addData("ArraySize", arr.size());
+                //telemetry.update();
+
+                for(int j=0; j<arr.size()-1; j++)
                 {
                     dcMotors[j].setPower(arr.get(j).getAsDouble());
-                    telemetry.addData("Motor"+j, dcMotors[j].getPower());
+                    //telemetry.addData("Motor"+j, dcMotors[j].getPower());
 
-                    telemetry.update();
+                    //telemetry.update();
 
                 }
-            }}catch(Exception e){telemetry.addLine(e.getMessage());telemetry.update();}
+                double toRunTime = arr.get(arr.size()-1).getAsLong();
+                //telemetry.addData("RunTime", toRunTime);
+                //telemetry.update();
+                Thread.sleep((long)toRunTime);
+
+                //while(runtime.time()<toRunTime)
+                //{
+                    //telemetry.addLine("Executing...");
+                    //telemetry.update();
+               // }
+            }
+
+        }catch(Exception e){telemetry.addLine(e.getMessage());telemetry.update();}
 
     }
     //TODO: FINISH!!!
