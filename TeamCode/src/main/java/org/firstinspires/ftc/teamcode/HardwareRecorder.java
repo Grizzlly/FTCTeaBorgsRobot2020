@@ -139,19 +139,19 @@ public class HardwareRecorder
             for(int i=0; i<totalticks; i++)
             {
                 JsonArray arr = jsonObject.getAsJsonArray(String.valueOf(i));
-                telemetry.addData("Array ", arr.toString());
-                telemetry.addData("ArraySize", arr.size());
-                telemetry.update();
+                //telemetry.addData("Array ", arr.toString());
+                //telemetry.addData("ArraySize", arr.size());
+                //telemetry.update();
 
                 for(int j=0; j<arr.size()-1; j++)
                 {
                     dcMotors[j].setPower(arr.get(j).getAsDouble());
-                    telemetry.addData("Motor"+j, dcMotors[j].getPower());
+                    //telemetry.addData("Motor"+j, dcMotors[j].getPower());
 
-                    telemetry.update();
+                    //telemetry.update();
 
                 }
-                double toRunTime = arr.get(arr.size()-1).getAsDouble();
+                double toRunTime = arr.get(arr.size()-1).getAsLong();
                 //telemetry.addData("RunTime", toRunTime);
                 //telemetry.update();
                 Thread.sleep((long)toRunTime);

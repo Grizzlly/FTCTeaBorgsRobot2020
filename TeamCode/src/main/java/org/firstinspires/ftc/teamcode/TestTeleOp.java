@@ -129,7 +129,7 @@ public class TestTeleOp extends LinearOpMode {
         try{
             recorder.StartRecording();}catch (IOException e){telemetry.addLine(e.getMessage());telemetry.update();}
         waitForStart();
-        long startTime= System.nanoTime();
+        long startTime= System.currentTimeMillis();
         runtime.reset();
         //try{
         //recorder.StartRecording();}catch (Exception e){telemetry.addLine("Wrong");}
@@ -233,8 +233,8 @@ public class TestTeleOp extends LinearOpMode {
             }
             //claws
 
-            recorder.Step(System.nanoTime()-startTime);
-            startTime=System.nanoTime();
+            recorder.Step(System.currentTimeMillis()-startTime);
+            startTime=System.currentTimeMillis();
 
             if(gamepad2.x) {
                 frontLeft.setPower(0.0);

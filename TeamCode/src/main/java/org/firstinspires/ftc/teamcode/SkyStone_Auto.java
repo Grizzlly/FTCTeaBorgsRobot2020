@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="SkyStone_Auto", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class SkyStone_Auto extends LinearOpMode {
 
     // Declare OpMode members.
