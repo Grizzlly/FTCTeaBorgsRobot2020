@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -36,6 +38,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.io.IOException;
 
@@ -75,11 +80,11 @@ public class TestTeleOp extends LinearOpMode {
     private final int CPR = 1112;
     boolean reached = false;
 
+
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
 
         //frontLeft.get
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -126,11 +131,11 @@ public class TestTeleOp extends LinearOpMode {
         //backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Wait for the game to start (driver presses PLAY)
-        try{
-            recorder.StartRecording();}catch (IOException e){telemetry.addLine(e.getMessage());telemetry.update();}
+        //try{
+        //    recorder.StartRecording();}catch (IOException e){}
         waitForStart();
         long startTime= System.currentTimeMillis();
-        runtime.reset();
+        recorder.StartRecording();
         //try{
         //recorder.StartRecording();}catch (Exception e){telemetry.addLine("Wrong");}
 
@@ -233,8 +238,8 @@ public class TestTeleOp extends LinearOpMode {
             }
             //claws
 
-            recorder.Step(System.currentTimeMillis()-startTime);
-            startTime=System.currentTimeMillis();
+            //recorder.Step(System.currentTimeMillis()-startTime);
+            //startTime=System.currentTimeMillis();
 
             if(gamepad2.x) {
                 frontLeft.setPower(0.0);
@@ -259,7 +264,7 @@ public class TestTeleOp extends LinearOpMode {
             }
 
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            /*telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front Left Pos", ": " + frontLeft.getCurrentPosition());
             telemetry.addData("Front Right Pos", ": " + frontRight.getCurrentPosition());
             telemetry.addData("Back Left Pos", ": " + backLeft.getCurrentPosition());
@@ -267,7 +272,7 @@ public class TestTeleOp extends LinearOpMode {
             telemetry.addData("lift Pos", ": " + motorLift.getCurrentPosition());
             telemetry.addData("claw Pos", ": " + clawSecMotor.getCurrentPosition());
 
-            telemetry.update();
+            telemetry.update();*/
             //recorder.Step();
 
             if(gamepad2.left_stick_button)
@@ -276,5 +281,11 @@ public class TestTeleOp extends LinearOpMode {
         //recorder.StopRecording();
         telemetry.addLine("Reacehd");
         telemetry.update();
+    }
+
+    public void moveStraight(double power, double ticks)
+    {
+        double leftSpeed;
+        double rightSpeed;
     }
 }
