@@ -80,6 +80,8 @@ public class TestTeleOp extends LinearOpMode {
     private final int CPR = 1112;
     boolean reached = false;
 
+    int k = 0;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -186,10 +188,46 @@ public class TestTeleOp extends LinearOpMode {
             backRight.setPower(powerBackRight);
             //omni
             //if(frontRight.isBusy() || frontLeft.isBusy() || backRight.isBusy() || backLeft.isBusy())sleep(5000);
-            //lift
-            /*if(motorLift.getCurrentPosition()<=CPR/5.1) powerLatchingUp=0;*/
 
-            /*if(motorLift.getCurrentPosition()>=5400) powerLatchingDown=0;*/
+            if(gamepad1.b == true)
+                k++;
+
+            if(gamepad1.x == true)
+                k--;
+
+            switch(k)
+            {
+                case 1:
+                    motorLift.setTargetPosition(1170);
+                    motorLift.setPower(0.5);
+                    while(motorLift.getCurrentPosition()<1100);
+                    motorLift.setPower(0);
+                case 2:
+                    motorLift.setTargetPosition(2109);
+                    motorLift.setPower(0.5);
+                    while(motorLift.getCurrentPosition()<2030);
+                    motorLift.setPower(0);
+                case 3:
+                    motorLift.setTargetPosition(3181);
+                    motorLift.setPower(0.5);
+                    while(motorLift.getCurrentPosition()<3110);
+                    motorLift.setPower(0);
+                case 4:
+                    motorLift.setTargetPosition(4380);
+                    motorLift.setPower(0.5);
+                    while(motorLift.getCurrentPosition()<4310);
+                    motorLift.setPower(0);
+                case 5:
+                    motorLift.setTargetPosition(5200);
+                    motorLift.setPower(0.5);
+                    while(motorLift.getCurrentPosition()<5130);
+                    motorLift.setPower(0);
+            }
+
+            //lift
+            if(motorLift.getCurrentPosition()<=CPR/5.1) powerLatchingUp=0;
+
+            if(motorLift.getCurrentPosition()>=5400) powerLatchingDown=0;
 
             if((powerLatchingUp==0 && powerLatchingDown==0))
             {
@@ -281,11 +319,5 @@ public class TestTeleOp extends LinearOpMode {
         //recorder.StopRecording();
         telemetry.addLine("Reacehd");
         telemetry.update();
-    }
-
-    public void moveStraight(double power, double ticks)
-    {
-        double leftSpeed;
-        double rightSpeed;
     }
 }

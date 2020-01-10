@@ -35,7 +35,7 @@ import java.util.List;
  *YES
  */
 @Autonomous(name= "DetectorRosu", group="Sky autonomous")
-//@Disabled//comment out this line before using
+@Disabled//comment out this line before using
 public class DetectorRosu extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
