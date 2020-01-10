@@ -29,8 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -38,9 +36,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.io.IOException;
 
@@ -57,13 +52,12 @@ import java.io.IOException;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@TeleOp(name="TestTeleOp", group="Linear Opmode")
+@TeleOp(name="TeleOp", group="Linear Opmode")
 //@Disabled
 public class TestTeleOp extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private HardwareRecorder recorder;
 
     private DcMotor frontLeft = null;
     private DcMotor frontRight = null;
@@ -80,13 +74,11 @@ public class TestTeleOp extends LinearOpMode {
     private final int CPR = 1112;
     boolean reached = false;
 
-    int k = 0;
-
-
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException{
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
 
         //frontLeft.get
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -99,9 +91,6 @@ public class TestTeleOp extends LinearOpMode {
         motorLift = hardwareMap.get(DcMotor.class, "motor_lift");
         clawMainMotor  = hardwareMap.get(DcMotor.class, "clawMainMotor");
         clawSecMotor = hardwareMap.get(DcMotor.class, "clawSecMotor");
-
-        recorder = new HardwareRecorder("TestTeleOP");
-        recorder.InitMotors(frontLeft, frontRight, backLeft, backRight);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -132,20 +121,10 @@ public class TestTeleOp extends LinearOpMode {
         //backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         //backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // Wait for the game to start (driver presses PLAY)
-        //try{
-        //    recorder.StartRecording();}catch (IOException e){}
-        waitForStart();
-        long startTime= System.currentTimeMillis();
-        recorder.StartRecording();
-        //try{
-        //recorder.StartRecording();}catch (Exception e){telemetry.addLine("Wrong");}
-
         double  omniSurpress = 0.4;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
             //omni
             double gamepadRightY = -gamepad2.right_stick_y;
             double gamepadLeftX = gamepad2.right_stick_x;
@@ -164,8 +143,8 @@ public class TestTeleOp extends LinearOpMode {
             powerFrontRight = Range.clip(powerFrontRight, -1, 1);
             powerBackLeft = Range.clip(powerBackLeft, -1, 1);
             powerBackRight = Range.clip(powerBackRight, -1, 1);
-            powerLatchingUp = Range.clip(powerLatchingUp, -0.7, 0.7);
-            powerLatchingDown = Range.clip(powerLatchingDown, -0.7, 0.7);
+            powerLatchingUp = Range.clip(powerLatchingUp, -1, 1);
+            powerLatchingDown = Range.clip(powerLatchingDown, -1, 1);
 
 
 
@@ -187,47 +166,10 @@ public class TestTeleOp extends LinearOpMode {
             backLeft.setPower(powerBackLeft);
             backRight.setPower(powerBackRight);
             //omni
-            //if(frontRight.isBusy() || frontLeft.isBusy() || backRight.isBusy() || backLeft.isBusy())sleep(5000);
-
-            if(gamepad1.b == true)
-                k++;
-
-            if(gamepad1.x == true)
-                k--;
-
-            switch(k)
-            {
-                case 1:
-                    motorLift.setTargetPosition(1170);
-                    motorLift.setPower(0.5);
-                    while(motorLift.getCurrentPosition()<1100);
-                    motorLift.setPower(0);
-                case 2:
-                    motorLift.setTargetPosition(2109);
-                    motorLift.setPower(0.5);
-                    while(motorLift.getCurrentPosition()<2030);
-                    motorLift.setPower(0);
-                case 3:
-                    motorLift.setTargetPosition(3181);
-                    motorLift.setPower(0.5);
-                    while(motorLift.getCurrentPosition()<3110);
-                    motorLift.setPower(0);
-                case 4:
-                    motorLift.setTargetPosition(4380);
-                    motorLift.setPower(0.5);
-                    while(motorLift.getCurrentPosition()<4310);
-                    motorLift.setPower(0);
-                case 5:
-                    motorLift.setTargetPosition(5200);
-                    motorLift.setPower(0.5);
-                    while(motorLift.getCurrentPosition()<5130);
-                    motorLift.setPower(0);
-            }
-
             //lift
-            if(motorLift.getCurrentPosition()<=CPR/5.1) powerLatchingUp=0;
+            if(motorLift.getCurrentPosition()<=CPR/5.5) powerLatchingUp=0;
 
-            if(motorLift.getCurrentPosition()>=5400) powerLatchingDown=0;
+            //if(motorLift.getCurrentPosition()>=5400) powerLatchingDown=0;
 
             if((powerLatchingUp==0 && powerLatchingDown==0))
             {
@@ -253,11 +195,11 @@ public class TestTeleOp extends LinearOpMode {
 
             if(gamepad1.y==true)
             {
-                clawMainMotor.setPower(0.5);
+                clawMainMotor.setPower(-0.5);
             }
             else if(gamepad1.a==true)
             {
-                clawMainMotor.setPower(-0.5);
+                clawMainMotor.setPower(0.5);
             }
             else {
                 clawMainMotor.setPower(0.0);
@@ -265,19 +207,17 @@ public class TestTeleOp extends LinearOpMode {
 
             if(gamepad1.dpad_down==true)
             {
-               clawSecMotor.setPower(0.5);
+                clawSecMotor.setPower(-0.5);
             }
             else if(gamepad1.dpad_up==true)
             {
-                clawSecMotor.setPower(-0.5);
+                clawSecMotor.setPower(0.5);
             }
             else {
-               clawSecMotor.setPower(0.0);
+                clawSecMotor.setPower(0.0);
             }
             //claws
 
-            //recorder.Step(System.currentTimeMillis()-startTime);
-            //startTime=System.currentTimeMillis();
 
             if(gamepad2.x) {
                 frontLeft.setPower(0.0);
@@ -301,23 +241,7 @@ public class TestTeleOp extends LinearOpMode {
                 clawSecMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
 
-            // Show the elapsed game time and wheel power.
-            /*telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Front Left Pos", ": " + frontLeft.getCurrentPosition());
-            telemetry.addData("Front Right Pos", ": " + frontRight.getCurrentPosition());
-            telemetry.addData("Back Left Pos", ": " + backLeft.getCurrentPosition());
-            telemetry.addData("Back Right Pos", ": " + backRight.getCurrentPosition());
-            telemetry.addData("lift Pos", ": " + motorLift.getCurrentPosition());
-            telemetry.addData("claw Pos", ": " + clawSecMotor.getCurrentPosition());
-
-            telemetry.update();*/
-            //recorder.Step();
-
-            if(gamepad2.left_stick_button)
-            {recorder.StopRecording();telemetry.addLine("stopppedpep");telemetry.update();break;}
+            telemetry.update();
         }
-        //recorder.StopRecording();
-        telemetry.addLine("Reacehd");
-        telemetry.update();
     }
 }

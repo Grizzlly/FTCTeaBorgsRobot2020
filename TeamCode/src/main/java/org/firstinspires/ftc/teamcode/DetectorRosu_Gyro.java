@@ -208,11 +208,6 @@ public class DetectorRosu_Gyro extends LinearOpMode {
                     while(runtime.seconds()<0.5){}
                     clawMainMotor.setPower(0);
 
-                    clawSecMotor.setPower(-0.4);
-                    runtime.reset();
-                    while(runtime.seconds()<0.18){}
-                    clawSecMotor.setPower(0);
-
                     driveLeftStraight(1696, 1696, 1696, 1696, 0, 0.4);
                     resetDrives();
                     runtime.reset();
@@ -296,11 +291,6 @@ public class DetectorRosu_Gyro extends LinearOpMode {
                     while(runtime.seconds()<0.5){}
                     clawMainMotor.setPower(0);
 
-                    clawSecMotor.setPower(-0.4);
-                    runtime.reset();
-                    while(runtime.seconds()<0.18){}
-                    clawSecMotor.setPower(0);
-
                     driveLeftStraight(1686, 1686, 1686, 1686, 0, 0.4);
                     resetDrives();
                     runtime.reset();
@@ -383,11 +373,6 @@ public class DetectorRosu_Gyro extends LinearOpMode {
                     runtime.reset();
                     while(runtime.seconds()<0.5){}
                     clawMainMotor.setPower(0);
-
-                    clawSecMotor.setPower(-0.4);
-                    runtime.reset();
-                    while(runtime.seconds()<0.3){}
-                    clawSecMotor.setPower(0);
 
                     driveLeftStraight(1346, 1346, 1346, 1346, 0, 0.4);
                     resetDrives();

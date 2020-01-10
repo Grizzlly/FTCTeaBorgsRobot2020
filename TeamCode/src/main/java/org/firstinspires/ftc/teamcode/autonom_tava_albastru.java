@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="autonom_tava_albastru", group="Linear Opmode")
+@Disabled
 public class autonom_tava_albastru extends LinearOpMode {
 
     // Declare OpMode members.

@@ -17,8 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name = "TavaGyro_Albastru", group = "tava")
-public class TavaGyro_Albastru extends LinearOpMode {
+@Autonomous(name = "TavaRosu_Gyro", group = "tava")
+public class TavaRosu_Gyro extends LinearOpMode {
 
     private BNO055IMU gyro;
 

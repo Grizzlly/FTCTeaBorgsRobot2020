@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 //cazul 3 stanga
 import android.view.Gravity;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -15,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "TavaGyro_Rosu", group = "tava")
+@Autonomous(name = "TavaGyro_Rosu", group = "tava")
 public class TavaGyro_Rosu extends LinearOpMode {
 
     private BNO055IMU gyro;

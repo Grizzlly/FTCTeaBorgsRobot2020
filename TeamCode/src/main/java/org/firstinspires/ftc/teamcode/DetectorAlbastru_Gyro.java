@@ -210,11 +210,6 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
                     while(runtime.seconds()<0.5){}
                     clawMainMotor.setPower(0);
 
-                    clawSecMotor.setPower(-0.4);
-                    runtime.reset();
-                    while(runtime.seconds()<0.2){}
-                    clawSecMotor.setPower(0);
-
                     driveRightStraight(2000, 2000, 2000, 2000, 0, 0.4);
                     resetDrives();
                     runtime.reset();
@@ -298,11 +293,6 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
                     while(runtime.seconds()<0.5){}
                     clawMainMotor.setPower(0);
 
-                    clawSecMotor.setPower(-0.4);
-                    runtime.reset();
-                    while(runtime.seconds()<0.2){}
-                    clawSecMotor.setPower(0);
-
                     driveRightStraight(1686, 1686, 1686, 1686, 0, 0.4);
                     resetDrives();
                     runtime.reset();
@@ -385,11 +375,6 @@ public class DetectorAlbastru_Gyro extends LinearOpMode {
                     runtime.reset();
                     while(runtime.seconds()<0.5){}
                     clawMainMotor.setPower(0);
-
-                    clawSecMotor.setPower(-0.4);
-                    runtime.reset();
-                    while(runtime.seconds()<0.2){}
-                    clawSecMotor.setPower(0);
 
                     driveRightStraight(2100, 2100, 2100, 2100, 0, 0.4);
                     resetDrives();
