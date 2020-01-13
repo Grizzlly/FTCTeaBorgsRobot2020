@@ -1,35 +1,5 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -39,24 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import java.io.IOException;
-
-
-/**
- * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
- * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
- * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all linear OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
 @TeleOp(name="TeleOp", group="Linear Opmode")
 //@Disabled
-public class TestTeleOp extends LinearOpMode {
+public class Lift_Butoane extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -67,6 +22,7 @@ public class TestTeleOp extends LinearOpMode {
     private DcMotor backRight = null;
 
     private DcMotor motorLift = null;
+    DcMotorController controler;
 
     private DcMotor clawMainMotor = null;
     private DcMotor clawSecMotor = null;
@@ -75,6 +31,11 @@ public class TestTeleOp extends LinearOpMode {
 
     private final int CPR = 1112;
     boolean reached = false;
+
+    int k=0;
+    int n=0;
+    boolean pressedUp = false;
+    boolean pressedDown = false;
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -95,6 +56,7 @@ public class TestTeleOp extends LinearOpMode {
         backRight.setDirection(DcMotor.Direction.FORWARD);
         motorLift.setDirection(DcMotor.Direction.FORWARD);
         clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
+        clawMainMotor.setDirection(DcMotor.Direction.REVERSE);
 
         motorLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         clawMainMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -110,10 +72,13 @@ public class TestTeleOp extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             //omni
-            double gamepadRightY = -gamepad2.right_stick_y;
-            double gamepadLeftX = gamepad2.right_stick_x;
+            double gamepadRightY = -gamepad2.right_stick_y*100/127;
+            double gamepadLeftX = gamepad2.right_stick_x*100/127;
             double gamepadLeftTrigger = -gamepad2.left_trigger;
             double gamepadRightTrigger = gamepad2.right_trigger;
+
+            gamepadRightY = gamepadRightY*gamepadRightY*Math.signum(gamepadRightY)/100;
+            gamepadLeftX = gamepadLeftX*gamepadLeftX*Math.signum(gamepadLeftX)/100;
 
             double powerFrontLeft = -gamepadRightY - gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
             double powerFrontRight = gamepadRightY - gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
@@ -130,11 +95,40 @@ public class TestTeleOp extends LinearOpMode {
             powerLatchingUp = Range.clip(powerLatchingUp, -1, 1);
             powerLatchingDown = Range.clip(powerLatchingDown, -1, 1);
 
-            if (gamepad2.right_bumper == true) {
+            pressedUp = false;
+            if(gamepad1.x && !pressedUp)
+            {
+                k++;
+                pressedUp = true;
+                LiftGoUpTo(k);
+            }
+
+            n=k;
+            pressedDown = false;
+            if(gamepad1.b && !pressedDown)
+            {
+                n--;
+                LiftGoDown(n);
+            }
+
+            if(gamepad1.y==true)
+            {
+                clawMainMotor.setPower(0.5);
+            }
+            else if(gamepad1.a==true)
+            {
+                clawMainMotor.setPower(-0.5);
+            }
+            else {
+                clawMainMotor.setPower(0.0);
+            }
+
+            /**if (gamepad2.right_bumper == true) {
                 powerFrontLeft = powerFrontLeft *   omniSurpress;
                 powerBackLeft = powerBackLeft *     omniSurpress;
                 powerFrontRight = powerFrontRight * omniSurpress;
                 powerBackRight = powerBackRight *   omniSurpress;
+
             }
 
             frontLeft.setPower(powerFrontLeft);
@@ -211,8 +205,39 @@ public class TestTeleOp extends LinearOpMode {
                 motorLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 clawSecMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
+             **/
 
             telemetry.update();
         }
+    }
+
+    public void LiftGoUpTo(int k)
+    {
+        if(k==0)
+            motorLift.setTargetPosition(0);
+        else if(k==1)
+            motorLift.setTargetPosition(1000);
+        else
+            motorLift.setTargetPosition(k*1000);
+
+        motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorLift.setPower(1.0);
+        while (motorLift.getCurrentPosition() < motorLift.getTargetPosition()-50);
+        motorLift.setPower(0.0);
+    }
+
+    public void LiftGoDown(int n)
+    {
+        if(n==0)
+            motorLift.setTargetPosition(0);
+        else if(n==1)
+            motorLift.setTargetPosition(1000);
+        else
+            motorLift.setTargetPosition(n*1000);
+
+        motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorLift.setPower(1.0);
+        while(motorLift.getCurrentPosition() > motorLift.getTargetPosition()+50);
+        motorLift.setPower(0);
     }
 }

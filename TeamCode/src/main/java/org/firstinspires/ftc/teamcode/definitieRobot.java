@@ -52,6 +52,8 @@ public class definitieRobot {
         backRight.setDirection(DcMotor.Direction.REVERSE);
         clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
         clawMainMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     void move_front(double power, int t1, int t2, int t3, int t4) {
