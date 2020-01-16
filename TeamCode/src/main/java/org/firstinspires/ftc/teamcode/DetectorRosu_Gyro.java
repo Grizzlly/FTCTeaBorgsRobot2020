@@ -73,7 +73,7 @@ public class DetectorRosu_Gyro extends LinearOpMode {
 
     OpenCvCamera phoneCam;
 
-    definitieRobot func = new definitieRobot();
+    //definitieRobot func = new definitieRobot();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -113,7 +113,7 @@ public class DetectorRosu_Gyro extends LinearOpMode {
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
-        func.init(hardwareMap);
+        //func.init(hardwareMap);
 
         waitForStart();
         runtime.reset();

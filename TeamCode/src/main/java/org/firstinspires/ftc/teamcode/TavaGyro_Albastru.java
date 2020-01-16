@@ -34,32 +34,6 @@ public class TavaGyro_Albastru extends LinearOpMode {
     public static HardwareMap hwMap;
     private ElapsedTime runtime = new ElapsedTime();
 
-    /**
-     * This function is executed when this Op Mode is selected from the Driver Station.
-     */
-     /*public void init(HardwareMap ahwMap) {
-        // Save reference to Hardware map
-        hwMap = ahwMap;
-
-        // Define and Initialize Motors
-        gyro = hwMap.get(BNO055IMU.class, "giroscop");
-
-        frontLeft  = hwMap.get(DcMotor.class, "fl_motor");
-        frontRight = hwMap.get(DcMotor.class, "fr_motor");
-        backLeft  = hwMap.get(DcMotor.class, "bl_motor");
-        backRight = hwMap.get(DcMotor.class, "br_motor");
-        clawSecMotor = hwMap.get(DcMotor.class, "clawSecMotor");
-        clawMainMotor = hwMap.get(DcMotor.class, "clawMainMotor");
-
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
-        clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
-        clawMainMotor.setDirection(DcMotor.Direction.REVERSE);
-    }
-    */
-
     @Override
     public void runOpMode() {
         gyro = hardwareMap.get(BNO055IMU.class, "giroscop");
@@ -152,49 +126,6 @@ public class TavaGyro_Albastru extends LinearOpMode {
             runtime.reset();
             while(runtime.seconds()<0.5){}
             resetDrives();
-
-            /*
-            driveFrontStraight(1544, 1712, 1705, 1791, 0, 0.5);
-            runtime.reset();
-            //while(runtime.seconds()<0.5){}
-            resetDrives();
-
-
-            clawMainMotor.setPower(-0.4);
-            runtime.reset();
-            while(runtime.seconds()<0.5){}
-
-            driveBackStraight(2012, 2012, 2012, 2012, 0, 0.5);
-            resetDrives();
-            runtime.reset();
-            //while(runtime.seconds()<0.5){}
-
-            driveRightStraight(5563, 5563, 5563, 5563, 0, 0.5);
-            resetDrives();
-            runtime.reset();
-            //while(runtime.seconds()<0.5){}
-
-            clawMainMotor.setPower(0.4);
-            runtime.reset();
-            while(runtime.seconds()<0.5){}
-            clawMainMotor.setPower(0);
-
-            clawSecMotor.setPower(-0.4);
-            runtime.reset();
-            while(runtime.seconds()<0.3){}
-            clawSecMotor.setPower(0);
-
-            driveLeftStraight(1346, 1346, 1346, 1346, 0, 0.4);
-            resetDrives();
-            runtime.reset();
-            //while(runtime.seconds()<0.5){}
-
-            driveFrontStraight(1023, 1023, 1023, 1023, 0, 0.4);
-            resetDrives();
-            runtime.reset();
-            //while(runtime.seconds()<0.5){}
-            */
-
         }
     }
 
