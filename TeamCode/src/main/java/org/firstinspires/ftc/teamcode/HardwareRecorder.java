@@ -57,7 +57,7 @@ public class HardwareRecorder
     public void StartRecording() throws IOException
     {
         File dir = Environment.getExternalStorageDirectory();
-        file = new File(dir, "testf.json");
+        file = new File(dir, name+".json");
         file.createNewFile();
         file.setWritable(true);
         file.setReadable(true);
@@ -114,57 +114,31 @@ public class HardwareRecorder
 
     public void Play(Telemetry telemetry) throws FileNotFoundException
     {
-
         File dir = Environment.getExternalStorageDirectory();
-        file = new File(dir, "testf.json");
-
-        //Object object = new JsonParser().parse(file.getAbsolutePath());
-        //JsonReader gsonr = new JsonReader(new FileReader(file));
+        file = new File(dir, name+".json");
 
         JsonParser jsonParser = new JsonParser();
-
         JsonObject jsonObject = jsonParser.parse(new FileReader(file)).getAsJsonObject();
-
 
         try
         {
-            //DcMotorReader reader = gson.fromJson(gsonr, DcMotorReader.class);
-
-
-
             int totalticks = jsonObject.get("TotalTicks").getAsInt();
             telemetry.addLine(String.valueOf(totalticks));telemetry.update();
-
 
             for(int i=0; i<totalticks; i++)
             {
                 JsonArray arr = jsonObject.getAsJsonArray(String.valueOf(i));
-                telemetry.addData("Array ", arr.toString());
-                telemetry.addData("ArraySize", arr.size());
-                telemetry.update();
 
                 for(int j=0; j<arr.size()-1; j++)
                 {
                     dcMotors[j].setPower(arr.get(j).getAsDouble());
-                    telemetry.addData("Motor"+j, dcMotors[j].getPower());
-
-                    telemetry.update();
-
                 }
-                double toRunTime = arr.get(arr.size()-1).getAsDouble();
-                //telemetry.addData("RunTime", toRunTime);
-                //telemetry.update();
-                Thread.sleep((long)toRunTime);
 
-                //while(runtime.time()<toRunTime)
-                //{
-                    //telemetry.addLine("Executing...");
-                    //telemetry.update();
-               // }
+                double toRunTime = arr.get(arr.size()-1).getAsDouble();
+                Thread.sleep((long)toRunTime);
             }
 
         }catch(Exception e){telemetry.addLine(e.getMessage());telemetry.update();}
-
     }
     //TODO: FINISH!!!
 }
