@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import static org.firstinspires.ftc.teamcode.PurePursuit.RobotMovement.followCurve;
 
 @TeleOp(name="Basic: Iterative OpMode", group="Iterative Opmode")
-//@Disabled
+@Disabled
 public class MyOpMode extends OpMode
 {
     private ElapsedTime runtime = new ElapsedTime();

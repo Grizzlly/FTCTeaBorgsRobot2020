@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="TeleOp", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class Lift_Butoane extends LinearOpMode {
 
     // Declare OpMode members.
@@ -79,7 +80,7 @@ public class Lift_Butoane extends LinearOpMode {
 
             gamepadRightY = gamepadRightY*gamepadRightY*Math.signum(gamepadRightY)/100;
             gamepadLeftX = gamepadLeftX*gamepadLeftX*Math.signum(gamepadLeftX)/100;
-
+            
             double powerFrontLeft = -gamepadRightY - gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
             double powerFrontRight = gamepadRightY - gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);
             double powerBackLeft = -gamepadRightY + gamepadLeftX - (gamepadLeftTrigger + gamepadRightTrigger);

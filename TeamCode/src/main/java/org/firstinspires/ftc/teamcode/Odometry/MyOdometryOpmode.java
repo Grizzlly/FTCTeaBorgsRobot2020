@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Odometry;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,7 @@ import static java.lang.Math.*;
  * Created by Sarthak on 10/4/2019.
  */
 @TeleOp(name = "My Odometry OpMode")
+@Disabled
 public class MyOdometryOpmode extends LinearOpMode {
     //Drive motors
     DcMotor frontRight, backRight, frontLeft, backLeft;
