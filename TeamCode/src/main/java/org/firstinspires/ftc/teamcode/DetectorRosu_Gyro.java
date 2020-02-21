@@ -419,7 +419,7 @@ public class DetectorRosu_Gyro extends LinearOpMode {
 
 
 
-                    driveFrontStraight(850, 850, 850, 850, 0, 0.5, 1);
+                    driveFrontStraight(850, 550, 850, 850, 0, 0.5, 1);
                     resetDrives();
                     runtime.reset();
                     //while(runtime.seconds()<0.5){}
@@ -430,7 +430,7 @@ public class DetectorRosu_Gyro extends LinearOpMode {
                     while (runtime.seconds() < 0.5) {
                     }
 
-                    driveBackStraight(1100,1100, 1100, 1100, 0, 0.9, 1);
+                    driveBackStraight(1100,750, 1100, 1100, 0, 0.9, 1);
                     resetDrives();
                     runtime.reset();
 
@@ -456,11 +456,11 @@ public class DetectorRosu_Gyro extends LinearOpMode {
                     RotateLeft(-90, 0.8, 0);
                     resetDrives();
 
-                    driveFrontStraight(700, 700, 700, 700, 0, 0.9, 1);
+                    driveFrontStraight(900, 700, 900, 900, 0, 0.9, 1);
                     resetDrives();
                     runtime.reset();
 
-                    driveFrontStraight(500, 500, 500, 500, 0, 0.5, 1);
+                    driveFrontStraight(900, 700, 900, 900, 0, 0.5, 1);
                     resetDrives();
                     runtime.reset();
 
@@ -470,7 +470,7 @@ public class DetectorRosu_Gyro extends LinearOpMode {
                     while (runtime.seconds() < 0.5) {
                     }
 
-                    driveBackStraight(900, 900, 900, 900, 0, 0.9, 1);
+                    driveBackStraight(1500, 900, 1500, 1500, 0, 0.9, 1);
                     resetDrives();
                     runtime.reset();
 
@@ -488,18 +488,18 @@ public class DetectorRosu_Gyro extends LinearOpMode {
                     }
                     clawMainMotor.setPower(0);
 
-                    driveBackStraight(4700, 4500, 4700, 4700, -85, 0.9, 1);
+                    driveBackStraight(5000, 4000, 5000, 5000, -85, 0.9, 1);
                     resetDrives();
                     runtime.reset();
 
                     RotateLeft(-90, 0.8, 0);
                     resetDrives();
 
-                    driveFrontStraight(700, 700, 700, 700, 0, 0.9, 1);
+                    driveFrontStraight(900, 700, 900, 900, 0, 0.9, 1);
                     resetDrives();
                     runtime.reset();
 
-                    driveFrontStraight(550, 550, 550, 550, 0, 0.5, 1);
+                    driveFrontStraight(900, 700, 900, 900, 0, 0.5, 1);
                     resetDrives();
                     runtime.reset();
 
@@ -509,7 +509,7 @@ public class DetectorRosu_Gyro extends LinearOpMode {
                     while (runtime.seconds() < 0.5) {
                     }
 
-                    driveBackStraight(1000, 800, 1000, 1000, 0, 0.9, 1);
+                    driveBackStraight(2000, 1100, 2000, 2000, 0, 0.9, 1);
                     resetDrives();
                     runtime.reset();
 

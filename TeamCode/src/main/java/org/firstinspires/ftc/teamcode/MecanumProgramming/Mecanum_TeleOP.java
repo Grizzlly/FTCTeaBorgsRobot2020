@@ -49,8 +49,8 @@ public class Mecanum_TeleOP extends OpMode
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-        motorLift1.setDirection(DcMotor.Direction.REVERSE);
-        motorLift2.setDirection(DcMotor.Direction.FORWARD);
+        motorLift1.setDirection(DcMotor.Direction.FORWARD);
+        motorLift2.setDirection(DcMotor.Direction.REVERSE);
         clawSecMotor.setDirection(DcMotor.Direction.FORWARD);
 
         motorLift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
