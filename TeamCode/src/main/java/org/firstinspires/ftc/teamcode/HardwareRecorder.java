@@ -26,26 +26,21 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ConcurrentModificationException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HardwareRecorder
 {
     private String name;
-    public static DcMotor[] dcMotors;
+    private DcMotor[] dcMotors;
 
     private File file;
     private PrintWriter pw;
 
-
     private Gson gson;
-    public static JsonObject gsonobj;
+    private JsonObject gsonobj;
 
     private boolean recording = false;
 
     private int ticks = 0;
-
-    private Recorder recorder;
 
     public HardwareRecorder(String name)
     {
@@ -59,10 +54,10 @@ public class HardwareRecorder
         dcMotors=objects;
     }
 
-    public void InitRecording() throws IOException
+    public void StartRecording() throws IOException
     {
         File dir = Environment.getExternalStorageDirectory();
-        file = new File(dir, "testf.json");
+        file = new File(dir, name+".json");
         file.createNewFile();
         file.setWritable(true);
         file.setReadable(true);
@@ -75,30 +70,17 @@ public class HardwareRecorder
         recording = true;
     }
 
-    public void StartRecording()
+    public void StopRecording()
     {
-        recorder = new Recorder();
-        recorder.start();
-    }
-
-    public void StopRecording() throws InterruptedException
-    {
-        if(recording)
-        {
-            recorder.recording.set(false); //exit gracefully
-            while(!recorder.done.get())
-            {
-                Thread.sleep(500);
-            }
+        if(recording){
             //jo.put("TotalTicks", ticks);
-            //gsonobj.addProperty("TotalTicks", ticks);
+            gsonobj.addProperty("TotalTicks", ticks);
             pw.print(gsonobj.toString());
 
             pw.flush();
             pw.close();
 
-            recording = false;
-        }
+            recording = false;}
     }
 
     public void Step(double time)
@@ -114,9 +96,17 @@ public class HardwareRecorder
                 jag.add(dcMotors[i].getPower());
             }
 
+            //for (DcMotor motor : dcMotors)
+            //{
+            //    jag.add(motor.getPower());
+            //ja.put(motor.getPower());
+            //}
 
             jag.add(time);
 
+
+
+            //jo.put(String.valueOf(ticks), ja);
             gsonobj.add(String.valueOf(ticks), jag);
         }
         ticks++;
@@ -124,103 +114,31 @@ public class HardwareRecorder
 
     public void Play(Telemetry telemetry) throws FileNotFoundException
     {
-
         File dir = Environment.getExternalStorageDirectory();
-        file = new File(dir, "testf.json");
-
-        //Object object = new JsonParser().parse(file.getAbsolutePath());
-        //JsonReader gsonr = new JsonReader(new FileReader(file));
+        file = new File(dir, name+".json");
 
         JsonParser jsonParser = new JsonParser();
-
         JsonObject jsonObject = jsonParser.parse(new FileReader(file)).getAsJsonObject();
-
 
         try
         {
-            //DcMotorReader reader = gson.fromJson(gsonr, DcMotorReader.class);
-
-
-
             int totalticks = jsonObject.get("TotalTicks").getAsInt();
-            //telemetry.addLine(String.valueOf(totalticks));telemetry.update();
-
+            telemetry.addLine(String.valueOf(totalticks));telemetry.update();
 
             for(int i=0; i<totalticks; i++)
             {
                 JsonArray arr = jsonObject.getAsJsonArray(String.valueOf(i));
-                //telemetry.addData("Array ", arr.toString());
-                //telemetry.addData("ArraySize", arr.size());
-                //telemetry.update();
 
-                for(int j=0; j<arr.size(); j++)
+                for(int j=0; j<arr.size()-1; j++)
                 {
                     dcMotors[j].setPower(arr.get(j).getAsDouble());
-                    //telemetry.addData("Motor"+j, dcMotors[j].getPower());
-
-                    //telemetry.update();
-
                 }
-                //double toRunTime = arr.get(arr.size()-1).getAsLong();
-                //telemetry.addData("RunTime", toRunTime);
-                //telemetry.update();
-                //Thread.sleep((long)toRunTime);
 
-                //while(runtime.time()<toRunTime)
-                //{
-                //telemetry.addLine("Executing...");
-                //telemetry.update();
-                // }
+                double toRunTime = arr.get(arr.size()-1).getAsDouble();
+                Thread.sleep((long)toRunTime);
             }
 
         }catch(Exception e){telemetry.addLine(e.getMessage());telemetry.update();}
-
     }
     //TODO: FINISH!!!
-}
-
-class Recorder extends Thread
-{
-    //private DcMotor[] motors;
-
-    public AtomicBoolean recording = new AtomicBoolean(false);
-    public AtomicBoolean done = new AtomicBoolean(true);
-
-    //public Recorder(DcMotor[] mot)
-    //{
-    //    motors=mot;
-    //    recording = true;
-    //}
-
-    @Override
-    public void run()
-    {
-        recording.set(true);
-        done.set(false);
-
-        //long toRunTime = System.currentTimeMillis();
-        long ticks = 0;
-        while(recording.get())
-        {try {
-            JsonArray jag = new JsonArray();
-
-            for (int i = 0; i < HardwareRecorder.dcMotors.length; i++) {
-                jag.add(HardwareRecorder.dcMotors[i].getPower());
-            }
-
-            //jag.add(System.currentTimeMillis() - toRunTime);
-            //toRunTime = System.currentTimeMillis();
-
-            HardwareRecorder.gsonobj.add(String.valueOf(ticks), jag);
-
-            ticks++;
-            }catch(ConcurrentModificationException ex)
-            {
-                Thread.currentThread().interrupt();
-
-            }
-        }
-        HardwareRecorder.gsonobj.addProperty("TotalTicks", ticks);
-        done.set(true);
-    }
 }
